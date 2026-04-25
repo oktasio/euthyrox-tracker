@@ -767,9 +767,9 @@ function loadS() {
 }
 // ═══════════ GIST SYNC ═══════════
 const GIST_ID    = 'd2562bf4a40b414818c82204d5b6e68f';
+const GIST_TOKEN = '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';
 const GIST_FILE  = 'euthyrox_data.json';
 let   gistTimer  = null;
-function getGistToken() { return localStorage.getItem('gist_token') || ''; }
 
 function buildGistPayload() {
   const now = new Date();
@@ -802,7 +802,7 @@ async function syncToGist() {
     await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `token ${getGistToken()}`,
+        'Authorization': `token ${GIST_TOKEN}`,
         'Content-Type': 'application/json',
         'User-Agent': 'EuthyroxTracker'
       },
@@ -1164,4 +1164,447 @@ function renderToday() {
   $('streak-n').textContent = streak;
   const streakEl = $('streak-n').parentElement;
   if(streak >= 30) { streakEl.textContent=''; streakEl.innerHTML='🏆<span id="streak-n">'+streak+'</span>'; streakEl.style.animation='pulse 1.5s ease-in-out infinite'; }
-  else if(streak >= 7) { streakEl.style.an
+  else if(streak >= 7) { streakEl.style.animation='pulse 2s ease-in-out infinite'; }
+  else { streakEl.style.animation='none'; }
+  const tot=total();
+  const sv=$('sv-total');
+  sv.textContent=tot;
+  sv.className='fs-num '+(tot<=S.crit?'danger':tot<=S.warn?'warn':'');
+  $('blister-ends').textContent = S.blister>0 ? 'blister: '+fmtD(addD(todayK(), S.blister)) : '⚠️ blister pusty!';
+
+  const ri=$('receipt-info');
+  if(S.receipt){
+    const diff=diffD(todayK(), S.receipt);
+    if(diff<0) ri.textContent='recepta: TERAZ!';
+    else ri.textContent='recepta: za '+diff+' dni';
+  } else { ri.textContent=''; }
+
+  renderAlerts(tot);
+  renderBlister();
+  renderTSHToday();
+  renderNextVisitBar();
+}
+
+function renderTSHToday() {
+  const w = $('tsh-today-widget');
+  if(!w) return;
+  if(!S.tsh || S.tsh.length === 0) { w.innerHTML = ''; return; }
+  const latest = S.tsh[0];
+  const cls = tshClass(latest.val, latest);
+  const lbl = cls === 'normal' ? '✓ W normie' : cls === 'high' ? '↑ Powyżej normy' : '↓ Poniżej normy';
+  const borderColor = cls === 'normal' ? 'var(--green)' : cls === 'high' ? 'var(--red)' : 'var(--yellow)';
+  w.innerHTML = `<div class="tsh-today" style="border-left:3px solid ${borderColor}">
+    <div class="tsh-today-left">
+      <div class="tsh-today-ico">🧬</div>
+      <div>
+        <div class="tsh-today-label">TSH — ostatni wynik</div>
+        <div class="tsh-today-sub">${fmtD(latest.date)} · ${lbl}</div>
+      </div>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div class="tsh-today-val ${cls}">${latest.val.toFixed(2)}</div>
+      <div class="tsh-today-unit">uIU/ml</div>
+    </div>
+  </div>`;
+}
+
+function renderNextVisitBar() {
+  const bar = $('next-visit-bar');
+  if(!bar) return;
+  const today = todayK();
+  // Znajdź najbliższą przyszłą wizytę
+  const upcoming = (S.visits||[])
+    .filter(v => diffD(today, v.date) >= 0)
+    .sort((a,b) => a.date.localeCompare(b.date))[0];
+  // Fallback: hardcoded endokrynolog
+  const endoDiff = diffD(today, '2026-06-24');
+  if(!upcoming && endoDiff < 0) { bar.style.display='none'; return; }
+  const visit = upcoming || { title: 'Endokrynolog — dr Romanowski', date: '2026-06-24', note: '' };
+  const diff = diffD(today, visit.date);
+  if(diff < 0) { bar.style.display='none'; return; }
+  const color = diff<=7 ? 'var(--red)' : diff<=14 ? 'var(--yellow)' : 'var(--accent)';
+  bar.style.display = 'block';
+  bar.innerHTML = `<div class="next-visit-bar" style="border-left:3px solid ${color}">
+    <div class="nv-left">
+      <div class="nv-ico">🏥</div>
+      <div>
+        <div class="nv-title">${visit.title}</div>
+        <div class="nv-sub">${fmtD(visit.date)}</div>
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0">
+      <div class="nv-days" style="color:${color}">${diff}</div>
+      <div class="nv-days-lbl">dni</div>
+    </div>
+  </div>`;
+}
+
+function renderAlerts(tot) {
+  const z=$('alert-zone'); z.innerHTML='';
+  if(tot<=S.crit) {
+    z.innerHTML+=`<div class="alert danger"><strong>Krytyczny poziom zapasu!</strong>Zostało tylko ${tot} dni tabletek.</div>`;
+  } else if(tot<=S.warn) {
+    z.innerHTML+=`<div class="alert warn"><strong>Niski zapas — czas działać</strong>Zostało ${tot} dni.</div>`;
+  }
+  if(S.receipt) {
+    const diff=diffD(todayK(), S.receipt);
+    if(diff<0) z.innerHTML+=`<div class="alert ok"><strong>Możesz odebrać receptę!</strong>Limit NFZ minął.</div>`;
+    else if(diff<=14) z.innerHTML+=`<div class="alert ok"><strong>Recepta za ${diff} dni</strong>${fmtD(S.receipt)}</div>`;
+  }
+  // Alert z wizyt w Dzisiaj — 3 poziomy: 21d info, 14d warn, 7d danger
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(todayK(), v.date);
+    if(diff<0 || diff>21) return;
+    const cls=diff<=7?'danger':diff<=14?'warn':'info';
+    const ico=diff<=7?'🚨':diff<=14?'⚠️':'📅';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} za ${diff} dni</strong>${v.note||''}</div>`;
+  });
+  // Alert badania lab (stały, hardcoded)
+  const diffLab=diffD(todayK(),'2026-06-10');
+  if(diffLab>=0 && diffLab<=21) {
+    const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${diffLab<=7?'🚨':'🔬'} Badania przed endokrynologiem — ${diffLab} dni</strong>Wykonaj do 10.06 · wizyta 24.06.2026</div>`;
+  }
+}
+
+function renderBlister() {
+  const used = BSIZE - S.blister;
+  const g=$('blister'); g.innerHTML='';
+  for(let i=1;i<=BSIZE;i++){
+    const el=document.createElement('div');
+    if(i<=used){ el.className='pill used'; el.textContent='✓'; }
+    else { el.className='pill avail'; el.textContent=i; }
+    g.appendChild(el);
+  }
+}
+
+function renderInventory() {
+  $('cv-bl').textContent=S.blister;
+  $('cv-pk').textContent=S.packs;
+  $('cv-sz').textContent=S.pack_size;
+  $('cv-dose').textContent=(S.dose||112);
+  $('cv-warn').textContent=S.warn;
+  $('cv-crit').textContent=S.crit;
+  if(S.receipt) $('receipt-inp').value=S.receipt;
+}
+
+function renderHistory() {
+  const h=$('hist30'); h.innerHTML='';
+  const today=todayK();
+  const start=firstDay();
+  for(let i=29;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const k=d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+    const el=document.createElement('div'); el.className='hday';
+    const fut=k>today, beforeStart=k<start;
+    if(!fut&&!beforeStart&&S.history[k]===true) el.classList.add('ok');
+    else if(!fut&&!beforeStart&&k<today) el.classList.add('miss');
+    if(fut||beforeStart) el.classList.add('fut');
+    if(k===today) el.classList.add('tod');
+    el.textContent=d.getDate();
+    h.appendChild(el);
+  }
+  const ms=monthStats();
+  $('s-taken').textContent=ms.taken+' dni';
+  $('s-miss').textContent=ms.missed ? ms.missed+' dni' : '0 — ideał! 🎯';
+  $('s-long').textContent=calcStreak()+' dni';
+  const start2=firstDay();
+  const daysSinceStart=Math.max(1, diffD(start2, today)+1);
+  const takenTotal=Object.values(S.history).filter(v=>v).length;
+  $('s-eff').textContent=Math.round(takenTotal/daysSinceStart*100)+'%';
+  $('s-since').textContent=fmtD(start2)+' ('+( diffD(start2,today)+1)+' dni)';
+}
+
+function renderResults() {
+  renderVisitAlerts();
+  renderTSHCurrent();
+  renderTSHChart();
+  renderTSHHistory();
+  renderVisitsList();
+}
+
+// ═══════════ TSH CHART ═══════════
+function renderTSHChart() {
+  const svg = document.getElementById('tsh-chart');
+  if(!svg) return;
+
+  // Tylko wyniki posortowane rosnąco (chronologicznie)
+  const pts = [...(S.tsh||[])].sort((a,b) => a.date.localeCompare(b.date));
+  if(pts.length < 2) {
+    svg.style.display = 'none';
+    return;
+  }
+  svg.style.display = 'block';
+
+  // Wymiary
+  const W = 320, H = 160, PL = 36, PR = 12, PT = 16, PB = 32;
+  const cw = W - PL - PR, ch = H - PT - PB;
+
+  // Zakresy wartości
+  const vals = pts.map(p => p.val);
+  const vMin = Math.max(0, Math.min(...vals) - 0.5);
+  const vMax = Math.min(12, Math.max(...vals) + 0.5);
+
+  // Daty → x
+  const dates = pts.map(p => new Date(p.date).getTime());
+  const dMin = dates[0], dMax = dates[dates.length-1];
+  const dRange = dMax - dMin || 1;
+
+  const toX = d  => PL + ((new Date(d).getTime() - dMin) / dRange) * cw;
+  const toY = v  => PT + ch - ((v - vMin) / (vMax - vMin)) * ch;
+
+  // Norma globalna (0.27–4.94) jako zielona strefa
+  const normLo = TSH_LOW, normHi = TSH_HIGH;
+  const nyTop = toY(Math.min(normHi, vMax));
+  const nyBot = toY(Math.max(normLo, vMin));
+
+  // Kolor CSS zmiennych — pobierz z root
+  const cs = getComputedStyle(document.documentElement);
+  const cGreen   = cs.getPropertyValue('--green').trim()   || '#22c55e';
+  const cRed     = cs.getPropertyValue('--red').trim()     || '#ef4444';
+  const cAccent  = cs.getPropertyValue('--accent').trim()  || '#4a9eff';
+  const cText3   = cs.getPropertyValue('--text3').trim()   || '#6a80a8';
+  const cBorder  = cs.getPropertyValue('--border2').trim() || 'rgba(255,255,255,0.14)';
+  const cBg3     = cs.getPropertyValue('--bg3').trim()     || '#151d35';
+  const cYellow  = cs.getPropertyValue('--yellow').trim()  || '#f59e0b';
+
+  // Linia operacji x
+  const opDate = new Date(OPERATION_DATE).getTime();
+  const opX = PL + ((opDate - dMin) / dRange) * cw;
+
+  // Polyline punkty
+  const linePoints = pts.map(p => `${toX(p.date).toFixed(1)},${toY(p.val).toFixed(1)}`).join(' ');
+
+  // Znaczniki rok (co rok)
+  const yearLabels = [];
+  const years = [...new Set(pts.map(p => p.date.slice(0,4)))];
+  years.forEach(y => {
+    const x = toX(y + '-07-01');
+    if(x > PL + 10 && x < W - PR - 10)
+      yearLabels.push(`<text x="${x.toFixed(0)}" y="${H-4}" font-size="8" fill="${cText3}" text-anchor="middle" font-family="JetBrains Mono,monospace">${y}</text>`);
+  });
+
+  // Y-axis labels
+  const yLabels = [];
+  [1,2,3,4,5,6,8,10].forEach(v => {
+    if(v >= vMin && v <= vMax) {
+      const y = toY(v);
+      yLabels.push(`<text x="${PL-4}" y="${y.toFixed(0)}" font-size="8" fill="${cText3}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace">${v}</text>`);
+      yLabels.push(`<line x1="${PL}" y1="${y.toFixed(0)}" x2="${W-PR}" y2="${y.toFixed(0)}" stroke="${cBorder}" stroke-width="0.5"/>`);
+    }
+  });
+
+  // Punkty na wykresie
+  const circles = pts.map((p,i) => {
+    const x = toX(p.date), y = toY(p.val);
+    const cls = tshClass(p.val, p);
+    const col = cls==='high' ? cRed : cls==='low' ? cYellow : cGreen;
+    const isPostOp = p.date > OPERATION_DATE;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i===pts.length-1?5:3.5}" fill="${col}" stroke="var(--bg)" stroke-width="1.5"/>`;
+  });
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', H);
+  svg.style.maxWidth = W + 'px';
+
+  svg.innerHTML = `
+    <!-- Tło normy -->
+    <rect x="${PL}" y="${nyTop.toFixed(1)}" width="${cw}" height="${(nyBot-nyTop).toFixed(1)}" fill="${cGreen}" fill-opacity="0.08" rx="2"/>
+
+    <!-- Linie siatki Y -->
+    ${yLabels.join('\n')}
+
+    <!-- Linia operacji -->
+    ${opX > PL && opX < W-PR ? `
+    <line x1="${opX.toFixed(1)}" y1="${PT}" x2="${opX.toFixed(1)}" y2="${H-PB}" stroke="${cAccent}" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+    <text x="${(opX+3).toFixed(0)}" y="${PT+10}" font-size="7" fill="${cAccent}" font-family="JetBrains Mono,monospace" opacity="0.8">op.</text>
+    ` : ''}
+
+    <!-- Linia normy top/bot -->
+    <line x1="${PL}" y1="${nyTop.toFixed(1)}" x2="${W-PR}" y2="${nyTop.toFixed(1)}" stroke="${cGreen}" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+    <line x1="${PL}" y1="${nyBot.toFixed(1)}" x2="${W-PR}" y2="${nyBot.toFixed(1)}" stroke="${cGreen}" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+
+    <!-- Linia danych -->
+    <polyline points="${linePoints}" fill="none" stroke="${cAccent}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- Punkty -->
+    ${circles.join('\n')}
+
+    <!-- Etykiety lat -->
+    ${yearLabels.join('\n')}
+
+    <!-- Etykieta normy -->
+    <text x="${W-PR-2}" y="${((nyTop+nyBot)/2).toFixed(0)}" font-size="7" fill="${cGreen}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace" opacity="0.7">norma</text>
+  `;
+}
+
+function renderVisitAlerts() {
+  const z=$('visit-alerts-zone'); z.innerHTML='';
+  const today=todayK();
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(today, v.date);
+    if(diff<0) return; // minęła
+    if(diff<=v.alert) {
+      const cls=diff<=3?'danger':diff<=7?'warn':'info';
+      const ico=diff<=3?'🚨':diff<=7?'⚠️':'📅';
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+    }
+  });
+  // Dynamiczne alerty wizyt — 3 poziomy
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(today, v.date);
+    if(diff<0 || diff>21) return;
+    const cls=diff<=7?'danger':diff<=14?'warn':'info';
+    const ico=diff<=7?'🚨':diff<=14?'⚠️':'📅';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+  });
+  // Stały alert badania lab przed wizytą 24.06
+  const diffEndo=diffD(today,'2026-06-24');
+  const diffLab=diffD(today,'2026-06-10');
+  if(diffEndo>0 && diffEndo<=60) {
+    if(diffLab>=0) {
+      const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
+      const ico=diffLab<=7?'🚨':diffLab<=14?'⚠️':'🔬';
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} Badania przed endokrynologiem — wykonaj do 10.06.2026</strong>Wizyta za ${diffEndo} dni · zostało ${diffLab} dni na laboratorium</div>`;
+    } else {
+      z.innerHTML+=`<div class="alert danger"><strong>🚨 Termin badań minął! Wizyta za ${diffEndo} dni</strong>Zrób badania natychmiast — KORLAB</div>`;
+    }
+  }
+}
+
+function renderTSHCurrent() {
+  const el=$('tsh-current-content');
+  const card=$('tsh-current-card');
+  if(!S.tsh||S.tsh.length===0) {
+    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników — dodaj poniżej</div>';
+    card.className='card card-accent';
+    return;
+  }
+  const latest=S.tsh[0]; // już posortowane desc
+  const cls=tshClass(latest.val, latest);
+  const lbl=tshLabel(latest.val, latest);
+  // Accent bar kolor zależnie od wyniku
+  card.className = cls==='normal' ? 'card card-green' : cls==='high' ? 'card card-red' : 'card card-yellow';
+
+  // Bar chart — używa normy per-wynik
+  const refLo = tshRefLow(latest), refHi = tshRefHigh(latest);
+  const barMax=10, pct=Math.min(100, (latest.val/barMax)*100);
+  const normLeft=(refLo/barMax)*100, normWidth=((refHi-refLo)/barMax)*100;
+  const customRef = tshHasCustomRef(latest) ? ` <span style="font-size:10px;color:var(--text3)">(norma tego lab.)</span>` : '';
+
+  el.innerHTML=`
+    <div class="tsh-current">
+      <div class="tsh-big ${cls}">${latest.val.toFixed(2)}</div>
+      <div class="tsh-meta">
+        <span class="tsh-unit">uIU/ml</span>
+        <span class="tsh-status-badge ${cls}">${lbl}</span>
+        <span class="tsh-date">${fmtD(latest.date)}</span>
+        ${latest.note?`<span style="font-size:11px;color:var(--text3);margin-top:2px;">${latest.note}</span>`:''}
+      </div>
+    </div>
+    <div class="tsh-bar-wrap">
+      <div class="tsh-bar-track">
+        <div class="tsh-bar-normal" style="left:${normLeft}%;width:${normWidth}%"></div>
+        <div class="tsh-bar-marker" style="left:${pct}%"></div>
+      </div>
+      <div class="tsh-bar-labels">
+        <span>0</span><span style="color:var(--green)">norma ${refLo}–${refHi}${customRef}</span><span>10+</span>
+      </div>
+    </div>`;
+}
+
+function renderTSHHistory() {
+  const el=$('tsh-history-list');
+  if(!S.tsh||S.tsh.length===0) {
+    el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0;">Brak wpisów</div>';
+    return;
+  }
+  // Buduj listę z separatorami epok
+  let html = '';
+  let shownPostOp = false;
+  let shownPreOp = false;
+
+  S.tsh.forEach((t, i) => {
+    const isPostOp = t.date > OPERATION_DATE;
+    const isPreOp  = t.date < OPERATION_DATE;
+
+    // Separator "PO OPERACJI" — przed pierwszym wynikiem po operacji
+    if(isPostOp && !shownPostOp) {
+      shownPostOp = true;
+      html += `<div class="tsh-era-sep">
+        <div class="tsh-era-line"></div>
+        <span class="tsh-era-label post-op">🏥 Po operacji (od kwi 2023)</span>
+        <div class="tsh-era-line"></div>
+      </div>`;
+    }
+
+    // Separator "PRZED OPERACJĄ" — przed pierwszym wynikiem sprzed operacji
+    if(isPreOp && !shownPreOp) {
+      shownPreOp = true;
+      html += `<div class="tsh-era-sep">
+        <div class="tsh-era-line"></div>
+        <span class="tsh-era-label pre-op">📋 Przed operacją</span>
+        <div class="tsh-era-line"></div>
+      </div>`;
+    }
+
+    const cls = tshClass(t.val, t);
+    const eraClass = isPostOp ? 'post-op' : (isPreOp ? 'pre-op' : '');
+    const eraTxt   = isPostOp ? 'po op' : (isPreOp ? 'przed op' : '');
+    const eraBadge = eraClass ? `<span class="tsh-era-badge ${eraClass}">${eraTxt}</span>` : '';
+    const lockOrDel = t.isDefault
+      ? ''
+      : `<button class="tsh-del-btn" onclick="deleteTSH(${i})">✕</button>`;
+
+    const refInfo = tshHasCustomRef(t)
+      ? `<span style="color:var(--text3);font-size:10px;font-family:'JetBrains Mono',monospace;"> · norma ${tshRefStr(t)}</span>`
+      : '';
+    const noteInfo = t.note ? ` · ${t.note}` : '';
+
+    html += `<div class="tsh-entry">
+      <div>
+        <div class="tsh-entry-val ${cls}">${t.val.toFixed(t.val % 1 === 0 ? 2 : (String(t.val).split('.')[1]||'').length > 2 ? 4 : 2)} uIU/ml${eraBadge}</div>
+        <div class="tsh-entry-info">${fmtD(t.date)}${noteInfo}${refInfo}</div>
+      </div>
+      ${lockOrDel}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function renderVisitsList() {
+  const el=$('visits-list');
+  const today=todayK();
+  const future=(S.visits||[]).filter(v=>v.date>=today);
+  if(future.length===0) {
+    el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0;">Brak nadchodzących wizyt</div>';
+    return;
+  }
+  el.innerHTML=future.map(v=>{
+    const diff=diffD(today,v.date);
+    const cls=diff<=3?'urgent':diff<=14?'soon':'ok';
+    const ico=diff<=7?'🚨':diff<=30?'📅':'🏥';
+    return `
+    <div class="visit-item">
+      <div class="visit-icon">${ico}</div>
+      <div class="visit-info">
+        <div class="visit-title">${v.title}</div>
+        <div class="visit-date">${fmtD(v.date)}</div>
+        <div class="visit-countdown ${cls}">za ${diff} dni${v.note?' · '+v.note:''}</div>
+      </div>
+      <button class="visit-del" onclick="deleteVisit(${v.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════ INIT ═══════════
+initTheme();
+loadS();
+renderAll();
+setInterval(renderHeader, 60000);
+
+</script>
+</body>
+</html>
