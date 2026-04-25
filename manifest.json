@@ -1,0 +1,26 @@
+{
+  "name": "Euthyrox Tracker",
+  "short_name": "Euthyrox",
+  "description": "Tracker tabletek Euthyrox N 112 - dzienna kontrola, zapas, recepta",
+  "start_url": "/euthyrox-tracker/",
+  "scope": "/euthyrox-tracker/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
+  "lang": "pl",
+  "icons": [
+    {
+      "src": "/euthyrox-tracker/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/euthyrox-tracker/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

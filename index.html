@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Euthyrox">
+<meta name="description" content="Tracker tabletek Euthyrox N 112">
+<title>Euthyrox Tracker</title>
+<link rel="manifest" href="/euthyrox-tracker/manifest.json">
+<link rel="apple-touch-icon" href="/euthyrox-tracker/icon-192.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+:root {
+  --bg: #0a0f1e; --bg2: #0f1628; --bg3: #151d35;
+  --card: #1a2340; --card2: #1f2a4a;
+  --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+  --text: #e8edf8; --text2: #a0b0d0; --text3: #6a80a8;
+  --accent: #4a9eff; --accent2: #2d7dd6;
+  --green: #22c55e; --green-bg: rgba(34,197,94,0.12); --green-border: rgba(34,197,94,0.3);
+  --yellow: #f59e0b; --yellow-bg: rgba(245,158,11,0.12); --yellow-border: rgba(245,158,11,0.3);
+  --red: #ef4444; --red-bg: rgba(239,68,68,0.12); --red-border: rgba(239,68,68,0.3);
+  --purple: #a855f7; --purple-bg: rgba(168,85,247,0.12); --purple-border: rgba(168,85,247,0.3);
+  --r: 14px; --r-sm: 10px; --r-xs: 8px;
+}
+
+/* ═══ LIGHT MODE — KREMOWY ═══ */
+[data-theme="light"] {
+  --bg: #f5f0e8; --bg2: #ede8de; --bg3: #e2dcd0;
+  --card: #faf7f2; --card2: #f0ece4;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.14);
+  --text: #1a2340; --text2: #4a5a78; --text3: #7a8aaa;
+  --accent: #2563eb; --accent2: #1d4ed8;
+  --green: #16a34a; --green-bg: rgba(22,163,74,0.10); --green-border: rgba(22,163,74,0.25);
+  --yellow: #d97706; --yellow-bg: rgba(217,119,6,0.10); --yellow-border: rgba(217,119,6,0.25);
+  --red: #dc2626; --red-bg: rgba(220,38,38,0.10); --red-border: rgba(220,38,38,0.25);
+  --purple: #7c3aed; --purple-bg: rgba(124,58,237,0.10); --purple-border: rgba(124,58,237,0.25);
+}
+[data-theme="light"] .hdr { background: linear-gradient(180deg, #ede8de 0%, #e8e2d6 100%); }
+[data-theme="light"] .bot-nav { background: rgba(237,232,222,0.96); }
+[data-theme="light"] .fs-big-btn { box-shadow: 0 4px 24px rgba(37,99,235,0.2); }
+[data-theme="light"] .hdr-icon { box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+[data-theme="light"] .toast { background: rgba(250,247,242,0.95); }
+[data-theme="light"] .c-btn { background: var(--bg3); color: var(--text); }
+[data-theme="light"] .date-inp, [data-theme="light"] .text-inp { background: var(--bg3); color: var(--text); }
+[data-theme="light"] .tsh-bar-track { background: var(--bg3); }
+[data-theme="light"] .hday { background: var(--bg3); color: var(--text3); }
+
+/* THEME TOGGLE BUTTON */
+.theme-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border2); background: var(--bg3); color: var(--text2); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-left: 8px; }
+.theme-btn:active { transform: scale(0.9); }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100dvh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* HEADER */
+.hdr { position: sticky; top: 0; z-index: 50; background: linear-gradient(180deg, #0d1526 0%, var(--bg2) 100%); border-bottom: 1px solid var(--border); padding: env(safe-area-inset-top, 0) 0 0; }
+.hdr-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 12px; }
+.hdr-brand { display: flex; align-items: center; gap: 10px; }
+.hdr-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent) 0%, #6c63ff 100%); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 2px 8px rgba(74,158,255,0.35); }
+.hdr-name { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+.hdr-sub { font-size: 11px; color: var(--text2); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+.hdr-date { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); line-height: 1.5; }
+
+/* BOTTOM NAV */
+.bot-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  background: rgba(13,18,38,0.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.nav-btn { padding: 10px 4px 8px; border: none; background: transparent; color: var(--text3); font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 500; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: all 0.2s; position: relative; }
+.nav-btn.active { color: var(--accent); }
+.nav-btn.active::before { content: ''; position: absolute; top: 0; left: 20%; right: 20%; height: 2px; background: var(--accent); border-radius: 0 0 3px 3px; box-shadow: 0 0 8px rgba(74,158,255,0.6); }
+.nav-ico { font-size: 20px; transition: transform 0.2s; }
+.nav-btn.active .nav-ico { transform: scale(1.1); }
+
+/* MAIN */
+.main { padding: 0; max-width: 480px; margin: 0 auto; height: calc(100dvh - 60px - 48px); overflow: hidden; }
+.view { display: none; flex-direction: column; gap: 11px; height: 100%; overflow-y: auto; padding: 14px 14px 80px; }
+.view.active { display: flex; animation: fadeUp 0.22s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+/* CARDS */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; transition: border-color 0.2s; }
+.card-accent { border-left: 3px solid var(--accent); }
+.card-green { border-left: 3px solid var(--green); }
+.card-red { border-left: 3px solid var(--red); }
+.card-purple { border-left: 3px solid var(--purple); }
+.card-yellow { border-left: 3px solid var(--yellow); }
+.slbl { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 10px; }
+
+/* BUTTONS */
+.btn-main { width: 100%; padding: 13px; border-radius: var(--r-sm); border: none; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: -0.2px; transition: all 0.15s; background: var(--accent); color: #fff; }
+.btn-main:active { transform: scale(0.97); opacity: 0.9; }
+.btn-sec { width: 100%; padding: 10px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: transparent; color: var(--text2); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-top: 8px; }
+.btn-sec:active { background: var(--bg3); }
+.btn-undo { width: 100%; margin-top: 7px; padding: 7px; border-radius: var(--r-xs); border: 1px solid var(--border); background: transparent; color: var(--text3); font-family: 'Inter', sans-serif; font-size: 12px; cursor: pointer; }
+
+/* ALERTS */
+.alert { border-radius: var(--r-sm); padding: 12px 14px; border: 1px solid transparent; font-size: 13px; line-height: 1.5; }
+.alert.warn { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
+.alert.danger { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+.alert.ok { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.alert.info { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); }
+.alert strong { display: block; font-weight: 600; margin-bottom: 2px; }
+
+/* INVENTORY CONTROLS */
+.ctrl-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.ctrl-row:last-child { border-bottom: none; }
+.ctrl-lbl { font-size: 13px; font-weight: 500; color: var(--text); }
+.ctrl-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.ctrl-grp { display: flex; align-items: center; gap: 9px; }
+.c-btn { width: 31px; height: 31px; border-radius: var(--r-xs); border: 1px solid var(--border2); background: var(--bg3); color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.c-btn:active { transform: scale(0.9); background: var(--card2); }
+.c-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; min-width: 34px; text-align: center; color: var(--accent); }
+.date-inp { width: 100%; margin-top: 8px; padding: 9px 12px; border-radius: var(--r-xs); border: 1px solid var(--border2); background: var(--bg3); color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; }
+.date-inp:focus { border-color: var(--accent); }
+.text-inp { width: 100%; padding: 9px 12px; border-radius: var(--r-xs); border: 1px solid var(--border2); background: var(--bg3); color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; }
+.text-inp:focus { border-color: var(--accent); }
+
+/* HISTORY */
+.hist-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-top: 8px; }
+.hday { aspect-ratio: 1; border-radius: var(--r-xs); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; border: 1px solid var(--border); background: var(--bg3); color: var(--text3); }
+.hday.ok { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.hday.miss { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+.hday.tod { border-color: var(--accent); border-width: 1.5px; }
+.hday.fut { opacity: 0.25; }
+.stat-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.stat-row:last-child { border-bottom: none; }
+.stat-row-lbl { font-size: 13px; color: var(--text2); }
+
+/* BLISTER */
+.blister-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 4px; }
+.pill { height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 600; border: 1px solid transparent; transition: all 0.15s; }
+.pill.avail { background: rgba(74,158,255,0.10); border-color: rgba(74,158,255,0.22); color: var(--accent); }
+.pill.used { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%) translateY(16px); background: rgba(30,40,70,0.95); backdrop-filter: blur(10px); border: 1px solid var(--border2); color: var(--text); padding: 9px 20px; border-radius: 99px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.28s ease; pointer-events: none; white-space: nowrap; z-index: 200; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* INSTALL BANNER */
+.install-bar { background: rgba(74,158,255,0.1); border: 1px solid rgba(74,158,255,0.25); border-radius: var(--r-sm); padding: 11px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.install-txt { font-size: 12px; color: var(--accent); line-height: 1.4; }
+.install-btn { padding: 7px 13px; border-radius: var(--r-xs); border: 1px solid var(--accent); background: transparent; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+/* TSH TODAY WIDGET */
+.tsh-today { display: flex; align-items: center; justify-content: space-between; padding: 7px 12px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: var(--card); gap: 8px; }
+.tsh-today-left { display: flex; align-items: center; gap: 8px; }
+.tsh-today-ico { font-size: 16px; }
+.tsh-today-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+.tsh-today-sub { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+.tsh-today-val { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+.tsh-today-val.normal { color: var(--green); }
+.tsh-today-val.high { color: var(--red); }
+.tsh-today-val.low { color: var(--yellow); }
+.tsh-today-unit { font-size: 9px; color: var(--text3); font-family: 'JetBrains Mono', monospace; text-align: right; margin-top: 2px; }
+
+/* NEXT VISIT BAR */
+.next-visit-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: var(--r-sm); border: 1px solid var(--border2); background: var(--card); gap: 8px; }
+.nv-left { display: flex; align-items: center; gap: 8px; }
+.nv-ico { font-size: 18px; }
+.nv-title { font-size: 12px; font-weight: 600; color: var(--text); }
+.nv-sub { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
+.nv-days { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
+.nv-days-lbl { font-size: 9px; color: var(--text3); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ═══ FULL SCREEN TODAY ═══ */
+#view-today { overflow: hidden; padding: 8px 14px 8px; gap: 6px; }
+#view-today.active { display: flex; }
+.fs-date-row { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
+.fs-date { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+.fs-status { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.fs-big-btn { flex: 1; min-height: 0; max-height: 160px; width: 100%; border: none; border-radius: var(--r); background: linear-gradient(135deg, var(--accent) 0%, #6c63ff 100%); box-shadow: 0 4px 24px rgba(74,158,255,0.3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+.fs-big-btn:active { opacity: 0.85; transform: scale(0.98); }
+.fs-big-btn.ok { background: var(--green-bg); border: 1px solid var(--green-border); cursor: default; }
+.fs-ico { font-size: 36px; line-height: 1; }
+.fs-btn-txt { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+.fs-big-btn.ok .fs-btn-txt { color: var(--green); }
+.fs-btn-sub { font-size: 11px; color: rgba(255,255,255,0.65); }
+.fs-big-btn.ok .fs-btn-sub { color: var(--green); opacity: 0.7; }
+.fs-info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--card); border-radius: var(--r); border: 1px solid var(--border); padding: 8px 14px; }
+.fs-info-box { display: flex; flex-direction: column; }
+.fs-info-center { align-items: center; }
+.fs-num { font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--accent); letter-spacing: -1px; line-height: 1; }
+.fs-num.warn { color: var(--yellow); }
+.fs-num.danger { color: var(--red); }
+.fs-num.yellow { color: var(--yellow); }
+.fs-lbl { font-size: 9px; color: var(--text3); margin-top: 3px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.5px; }
+.fs-bottom-row { display: flex; justify-content: space-between; padding: 0 2px; }
+.fs-bottom-item { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+/* ═══ WYNIKI — TSH MODULE ═══ */
+.tsh-current { display: flex; align-items: center; gap: 16px; padding: 4px 0 12px; }
+.tsh-big { font-size: 48px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -2px; line-height: 1; }
+.tsh-big.normal { color: var(--green); }
+.tsh-big.high { color: var(--red); }
+.tsh-big.low { color: var(--yellow); }
+.tsh-meta { display: flex; flex-direction: column; gap: 3px; }
+.tsh-unit { font-size: 12px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.tsh-status-badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 99px; padding: 4px 10px; font-size: 11px; font-weight: 600; }
+.tsh-status-badge.normal { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+.tsh-status-badge.high { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+.tsh-status-badge.low { background: var(--yellow-bg); border: 1px solid var(--yellow-border); color: var(--yellow); }
+.tsh-date { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+/* TSH Bar */
+.tsh-bar-wrap { margin: 12px 0 4px; }
+.tsh-bar-track { height: 10px; border-radius: 99px; background: var(--bg3); border: 1px solid var(--border); position: relative; overflow: visible; }
+.tsh-bar-normal { position: absolute; top: 0; height: 100%; border-radius: 99px; background: var(--green-bg); border: 1px solid var(--green-border); }
+.tsh-bar-marker { position: absolute; top: -4px; width: 3px; height: 18px; border-radius: 2px; background: var(--accent); transform: translateX(-50%); transition: left 0.5s ease; }
+.tsh-bar-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--text3); font-family: 'JetBrains Mono', monospace; margin-top: 4px; }
+
+/* TSH History list */
+.tsh-entry { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.tsh-entry:last-child { border-bottom: none; }
+.tsh-entry-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 600; }
+.tsh-entry-val.normal { color: var(--green); }
+.tsh-entry-val.high { color: var(--red); }
+.tsh-entry-val.low { color: var(--yellow); }
+.tsh-entry-info { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+.tsh-del-btn { padding: 4px 10px; border-radius: var(--r-xs); border: 1px solid var(--border); background: transparent; color: var(--text3); font-size: 11px; cursor: pointer; }
+/* TSH era separator */
+.tsh-era-sep { display: flex; align-items: center; gap: 8px; padding: 12px 0 6px; }
+.tsh-era-line { flex: 1; height: 1px; background: var(--border2); }
+.tsh-era-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; padding: 3px 8px; border-radius: 99px; font-weight: 600; }
+.tsh-era-label.post-op { color: var(--accent); background: rgba(74,158,255,0.12); border: 1px solid rgba(74,158,255,0.25); }
+.tsh-era-label.pre-op { color: var(--yellow); background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); }
+/* TSH default lock badge */
+.tsh-lock-badge { font-size: 10px; color: var(--text3); padding: 2px 6px; border-radius: 4px; background: var(--bg3); border: 1px solid var(--border); cursor: default; }
+/* TSH era badge inline */
+.tsh-era-badge { font-size: 9px; font-family: 'JetBrains Mono', monospace; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+.tsh-era-badge.post-op { color: var(--accent); background: rgba(74,158,255,0.10); }
+.tsh-era-badge.pre-op { color: var(--yellow); background: rgba(245,158,11,0.10); }
+
+/* ADD TSH FORM */
+.add-form { display: flex; flex-direction: column; gap: 8px; }
+.form-row { display: flex; gap: 8px; }
+.form-row .text-inp { flex: 1; }
+.form-row .date-inp { flex: 1; margin-top: 0; }
+.form-lbl { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+
+/* WIZYTY */
+.visit-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.visit-item:last-child { border-bottom: none; }
+.visit-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.visit-info { flex: 1; }
+.visit-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.visit-date { font-size: 12px; color: var(--text2); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+.visit-countdown { font-size: 11px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+.visit-countdown.soon { color: var(--yellow); }
+.visit-countdown.urgent { color: var(--red); }
+.visit-countdown.ok { color: var(--text3); }
+.visit-del { padding: 4px 10px; border-radius: var(--r-xs); border: 1px solid var(--border); background: transparent; color: var(--text3); font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+
+/* OTHER RESULTS */
+.result-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.result-item:last-child { border-bottom: none; }
+.result-name { font-size: 12px; color: var(--text2); }
+.result-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
+.result-val.normal { color: var(--green); }
+.result-val.abnormal { color: var(--red); }
+.result-ref { font-size: 10px; color: var(--text3); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f6fa; --bg2: #ffffff; --bg3: #eef0f5;
+    --card: #ffffff; --card2: #f0f2f8;
+    --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.14);
+    --text: #1a2340; --text2: #4a5878; --text3: #8899bb;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-brand">
+      <div class="hdr-icon">💊</div>
+      <div>
+        <div class="hdr-name">Euthyrox Tracker</div>
+        <div class="hdr-sub" id="hdr-sub">N 112 · na czczo · codziennie</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="hdr-date" id="hdr-date"></div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Zmień motyw">🌙</button>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="install-bar" id="install-bar" style="display:none">
+    <div class="install-txt">Zainstaluj aplikację na ekranie głównym</div>
+    <button class="install-btn" onclick="installApp()">Instaluj</button>
+  </div>
+
+  <!-- ═══ VIEW: DZISIAJ ═══ -->
+  <div class="view active" id="view-today">
+    <div class="fs-date-row">
+      <div class="fs-date" id="today-lbl"></div>
+      <div class="fs-status" id="fs-status"></div>
+    </div>
+    <button class="fs-big-btn" id="btn-take" onclick="takePill()">
+      <span class="fs-ico" id="s-orb">💊</span>
+      <span class="fs-btn-txt" id="s-title">Wziąłem tabletkę</span>
+      <span class="fs-btn-sub" id="s-sub">Euthyrox N 112 · na czczo</span>
+    </button>
+    <button class="btn-undo" id="btn-undo" style="display:none" onclick="undoPill()">↩ Cofnij (pomyłka)</button>
+    <div class="fs-info-row">
+      <div class="fs-info-box">
+        <div class="fs-num" id="sv-blister">0</div>
+        <div class="fs-lbl">w blistrze</div>
+      </div>
+      <div class="fs-info-box fs-info-center">
+        <div class="fs-num yellow">🔥<span id="streak-n">0</span></div>
+        <div class="fs-lbl">seria dni</div>
+      </div>
+      <div class="fs-info-box" style="text-align:right">
+        <div class="fs-num" id="sv-total">0</div>
+        <div class="fs-lbl">zapas łączny</div>
+      </div>
+    </div>
+    <div class="blister-grid" id="blister"></div>
+    <div class="fs-bottom-row">
+      <div class="fs-bottom-item" id="blister-ends"></div>
+      <div class="fs-bottom-item" id="receipt-info"></div>
+    </div>
+    <div id="tsh-today-widget"></div>
+    <div id="next-visit-bar" style="display:none"></div>
+    <div id="alert-zone"></div>
+  </div>
+
+  <!-- ═══ VIEW: ZAPAS ═══ -->
+  <div class="view" id="view-inventory">
+    <div class="card">
+      <div class="slbl">Stan tabletek</div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Tabletki w otwartym blistrze</div><div class="ctrl-sub">maks. 25 szt.</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="adj('blister',-1)">−</button>
+          <div class="c-val" id="cv-bl">0</div>
+          <button class="c-btn" onclick="adj('blister',+1)">+</button>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Nieotwarte opakowania</div><div class="ctrl-sub">całe paczki</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="adj('packs',-1)">−</button>
+          <div class="c-val" id="cv-pk">0</div>
+          <button class="c-btn" onclick="adj('packs',+1)">+</button>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Tabletek w opakowaniu</div><div class="ctrl-sub">25 / 50 / 100</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="cycleSize()">⟳</button>
+          <div class="c-val" id="cv-sz">50</div>
+          <button class="c-btn" onclick="cycleSize()">⟳</button>
+        </div>
+      </div>
+    </div>
+    <div class="card card-accent">
+      <div class="slbl">Dawka</div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Aktualna dawka (µg)</div><div class="ctrl-sub">ustaw zgodnie z receptą</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="adjDose(-12.5)">−</button>
+          <div class="c-val" id="cv-dose">112</div>
+          <button class="c-btn" onclick="adjDose(+12.5)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="card card-yellow" id="card-recepta">
+      <div class="slbl">Recepta NFZ</div>
+      <div class="ctrl-lbl">Następna recepta dostępna od:</div>
+      <input type="date" class="date-inp" id="receipt-inp" onchange="saveReceipt()">
+      <div id="receipt-status" style="font-size:11px;color:var(--text3);margin-top:7px;">Wpisz datę kiedy możesz odebrać nową receptę</div>
+    </div>
+    <div class="card">
+      <div class="slbl">Progi alertów</div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Alert żółty (ostrzeżenie)</div><div class="ctrl-sub">dni do końca zapasu</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="adj('warn',-1)">−</button>
+          <div class="c-val" id="cv-warn">14</div>
+          <button class="c-btn" onclick="adj('warn',+1)">+</button>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <div><div class="ctrl-lbl">Alert czerwony (krytyczny)</div><div class="ctrl-sub">dni do końca zapasu</div></div>
+        <div class="ctrl-grp">
+          <button class="c-btn" onclick="adj('crit',-1)">−</button>
+          <div class="c-val" id="cv-crit">7</div>
+          <button class="c-btn" onclick="adj('crit',+1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="slbl">Powiadomienia</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;">
+        Codzienne przypomnienie o 5:30 wysyłane przez Telegram.<br>
+        <span style="color:var(--text3);font-size:11px;">Bot: @EuthyroxOKI_bot</span>
+      </div>
+    </div>
+    <div class="card card-accent">
+      <div class="slbl" style="color:var(--accent);">Kopia zapasowa</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6;">Eksportuj historię TSH, wizyty i dawki do pliku JSON. Przechowaj w chmurze — to Twoje archiwum medyczne.</div>
+      <button class="btn-main" style="margin-bottom:8px;" onclick="exportData()">📤 Eksportuj dane (JSON)</button>
+      <button class="btn-sec" onclick="importData()">📥 Importuj dane z pliku</button>
+    </div>
+
+    <div class="card card-red">
+      <div class="slbl" style="color:var(--red);">Dane</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.5;">Jeśli historia pokazuje błędne wartości — zresetuj dane i wprowadź od nowa.</div>
+      <button class="btn-main" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);" onclick="resetData()">🗑 Wyczyść dane aplikacji</button>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW: HISTORIA ═══ -->
+  <div class="view" id="view-history">
+    <div class="card">
+      <div class="slbl">Ostatnie 30 dni</div>
+      <div class="hist-grid" id="hist30"></div>
+    </div>
+    <div class="card">
+      <div class="slbl">Statystyki</div>
+      <div class="stat-row"><div class="stat-row-lbl">Wzięte w tym miesiącu</div><div style="font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--green);" id="s-taken">—</div></div>
+      <div class="stat-row"><div class="stat-row-lbl">Pominięte w tym miesiącu</div><div style="font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--red);" id="s-miss">—</div></div>
+      <div class="stat-row"><div class="stat-row-lbl">Aktualna seria</div><div style="font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--yellow);" id="s-long">—</div></div>
+      <div class="stat-row"><div class="stat-row-lbl">Skuteczność (od startu)</div><div style="font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--accent);" id="s-eff">—</div></div>
+      <div class="stat-row"><div class="stat-row-lbl">Używasz od</div><div style="font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text2);" id="s-since">—</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW: WYNIKI ═══ -->
+  <div class="view" id="view-results">
+
+    <!-- ALERTY WIZYT -->
+    <div id="visit-alerts-zone"></div>
+
+    <!-- TSH AKTUALNY -->
+    <div class="card card-accent" id="tsh-current-card">
+      <div class="slbl">TSH — ostatni wynik</div>
+      <div id="tsh-current-content">
+        <div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników — dodaj poniżej</div>
+      </div>
+    </div>
+
+    <!-- WYKRES TSH -->
+    <div class="card" style="border-left:3px solid var(--accent);">
+      <div class="slbl">Trend TSH — wykres</div>
+      <div id="tsh-chart-wrap" style="width:100%;overflow-x:auto;">
+        <svg id="tsh-chart" style="display:block;"></svg>
+      </div>
+    </div>
+
+    <!-- HISTORIA TSH -->
+    <div class="card card-accent">
+      <div class="slbl">Historia TSH</div>
+      <div id="tsh-history-list">
+        <div style="font-size:12px;color:var(--text3);padding:8px 0;">Brak wpisów</div>
+      </div>
+      <button class="btn-sec" onclick="showAddTSH()" id="btn-add-tsh">+ Dodaj wynik TSH</button>
+      <!-- FORMULARZ DODAWANIA -->
+      <div id="add-tsh-form" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div class="add-form">
+          <div>
+            <div class="form-lbl">Wartość TSH (uIU/ml)</div>
+            <input type="number" step="0.0001" class="text-inp" id="inp-tsh-val" placeholder="np. 5.81">
+          </div>
+          <div>
+            <div class="form-lbl">Data badania</div>
+            <input type="date" class="date-inp" id="inp-tsh-date" style="margin-top:0">
+          </div>
+          <div>
+            <div class="form-lbl">Zakres referencyjny laboratorium</div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <input type="number" step="0.01" class="text-inp" id="inp-tsh-ref-low" placeholder="od  np. 0.27" style="flex:1">
+              <span style="color:var(--text3);font-size:13px;flex-shrink:0;">—</span>
+              <input type="number" step="0.01" class="text-inp" id="inp-tsh-ref-high" placeholder="do  np. 4.94" style="flex:1">
+            </div>
+            <div style="font-size:10px;color:var(--text3);margin-top:4px;">Przepisz z wydruku z laboratorium. Jeśli puste — użyta domyślna norma 0.27–4.94.</div>
+          </div>
+          <div>
+            <div class="form-lbl">Notatka (opcjonalnie)</div>
+            <input type="text" class="text-inp" id="inp-tsh-note" placeholder="np. po zmianie dawki">
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-main" style="flex:1" onclick="saveTSH()">Zapisz</button>
+            <button class="btn-sec" style="flex:0 0 auto;width:auto;padding:10px 16px;margin-top:0;" onclick="hideAddTSH()">Anuluj</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INNE WYNIKI (FT4, FT3, Ca) -->
+    <div class="card">
+      <div class="slbl">Wyniki z 08.12.2025</div>
+      <div id="other-results">
+        <div class="result-item">
+          <div><div class="result-name">FT4-wolne</div><div class="result-ref">ref: 0.7–1.48 ng/dL</div></div>
+          <div style="text-align:right"><div class="result-val normal">0.99</div><div style="font-size:10px;color:var(--text3);">ng/dL</div></div>
+        </div>
+        <div class="result-item">
+          <div><div class="result-name">FT3-wolne</div><div class="result-ref">ref: 1.71–3.71 pg/mL</div></div>
+          <div style="text-align:right"><div class="result-val normal">2.80</div><div style="font-size:10px;color:var(--text3);">pg/mL</div></div>
+        </div>
+        <div class="result-item">
+          <div><div class="result-name">Wapń całkowity</div><div class="result-ref">ref: 9–10.2 mg/dL ↓</div></div>
+          <div style="text-align:right"><div class="result-val abnormal">8.9</div><div style="font-size:10px;color:var(--text3);">mg/dL</div></div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:10px;">Lekarz: dr Romanowski · Rudzkie Lab. Analityczno-Bakteriologiczne</div>
+    </div>
+
+    <!-- WIZYTY I BADANIA -->
+    <div class="card">
+      <div class="slbl">Wizyty i badania</div>
+      <div id="visits-list"></div>
+      <button class="btn-sec" onclick="showAddVisit()" id="btn-add-visit">+ Dodaj wizytę / badanie</button>
+      <!-- FORMULARZ WIZYTY -->
+      <div id="add-visit-form" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+        <div class="add-form">
+          <div>
+            <div class="form-lbl">Typ wizyty / badania</div>
+            <input type="text" class="text-inp" id="inp-visit-title" placeholder="np. Endokrynolog, Badania TSH">
+          </div>
+          <div>
+            <div class="form-lbl">Data wizyty</div>
+            <input type="date" class="date-inp" id="inp-visit-date" style="margin-top:0">
+          </div>
+          <div>
+            <div class="form-lbl">Alert przed wizytą (dni)</div>
+            <input type="number" class="text-inp" id="inp-visit-alert" value="14" min="1" max="60">
+          </div>
+          <div>
+            <div class="form-lbl">Notatka</div>
+            <input type="text" class="text-inp" id="inp-visit-note" placeholder="np. mieć wyniki badań gotowe">
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-main" style="flex:1" onclick="saveVisit()">Zapisz</button>
+            <button class="btn-sec" style="flex:0 0 auto;width:auto;padding:10px 16px;margin-top:0;" onclick="hideAddVisit()">Anuluj</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USG + HISTORIA WIZYT -->
+    <div class="card card-green">
+      <div class="slbl">Ostatnie wizyty (archiwum)</div>
+      <div class="visit-item">
+        <div class="visit-icon">🏥</div>
+        <div class="visit-info">
+          <div class="visit-title">Endokrynolog — dr Romanowski</div>
+          <div class="visit-date">09.12.2025</div>
+          <div class="visit-countdown ok">✓ Odbyła się</div>
+        </div>
+      </div>
+      <div class="visit-item">
+        <div class="visit-icon">🔬</div>
+        <div class="visit-info">
+          <div class="visit-title">USG szyi</div>
+          <div class="visit-date">05.12.2025</div>
+          <div class="visit-countdown ok">✓ Odbyło się</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKIEROWANIE DO LAB -->
+    <div class="card" style="border-left: 3px solid var(--purple);">
+      <div class="slbl" style="color:var(--purple);">Zlecone badania — do wykonania</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+        1. Wapń zjonizowany<br>
+        2. Witamina D - 25 OH<br>
+        3. Fosfor nieorganiczny<br>
+        4. PTH - Parathormon<br>
+        5. TSH<br>
+        6. Wapń całkowity (surowica)
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px;">Skierowanie: dr Romanowski · KORLAB · nr 0000000000081501493593</div>
+      <div style="font-size:11px;color:var(--purple);margin-top:6px;font-weight:600;">⚠️ Wykonaj min. 2 tygodnie przed wizytą 24.06.2026 → do 10.06.2026</div>
+    </div>
+
+    <!-- ROZPOZNANIA ICD-10 -->
+    <div class="card" style="border-left:3px solid var(--purple);">
+      <div class="slbl">Rozpoznania — ICD-10</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">E89.0</span>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Niedoczynność tarczycy po leczeniu</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Postthyroidectomy hypothyroidism — po tyreoidektomii 28.03.2023</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">D34</span>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Guz łagodny tarczycy</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Benign neoplasm of thyroid gland — wole guzkowe, biopsja 2022</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">Z79.8</span>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Długotrwałe stosowanie leków hormonalnych</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Euthyrox N 112 µg — Lewotyroksyna sodowa, od 04.04.2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORIA MEDYCZNA — TIMELINE -->
+    <div class="card" style="border-left:3px solid var(--text3);">
+      <div class="slbl">Historia medyczna</div>
+
+      <!-- Linia czasu pionowa -->
+      <div style="position:relative;padding-left:28px;">
+
+        <!-- Linia oś -->
+        <div style="position:absolute;left:10px;top:8px;bottom:8px;width:2px;background:var(--border2);border-radius:2px;"></div>
+
+        <!-- BIOPSJA -->
+        <div style="position:relative;margin-bottom:20px;">
+          <div style="position:absolute;left:-22px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--text3);border:2px solid var(--bg);"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">wrz 2022</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">🔬 Biopsja tarczycy</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.6;">
+            Prawy płat: 06.09.2022 · Lewy płat: 02.09.2022<br>
+            <span style="color:var(--text3);">Wynik: wole guzkowe — kwalifikacja do operacji</span>
+          </div>
+        </div>
+
+        <!-- OPERACJA -->
+        <div style="position:relative;margin-bottom:20px;">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">28.03.2023</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">🏥 Tyreoidektomia</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.6;">Całkowite usunięcie płata lewego z cieśnią i fragmentami płata prawego</div>
+          <div style="margin-top:6px;padding:5px 8px;border-radius:6px;background:var(--bg3);display:inline-flex;align-items:center;gap:8px;">
+            <span style="font-size:10px;color:var(--text3);">Grupa krwi oznaczona podczas zabiegu</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--red);">B Rh+</span>
+          </div>
+        </div>
+
+        <!-- DAWKOWANIE -->
+        <div style="position:relative;">
+          <div style="position:absolute;left:-22px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--bg);"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">04.04.2023 — dziś</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">💊 Euthyrox — historia dawkowania</div>
+          <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:var(--bg3);">
+              <span style="font-size:11px;color:var(--text3);">04.04.2023 – 09.12.2025</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--text2);">100 µg</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:var(--bg3);">
+              <span style="font-size:11px;color:var(--text3);">10.12.2025 – 31.12.2025</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--yellow);">100 / 112 µg</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);">
+              <span style="font-size:11px;color:var(--text3);">od 01.01.2026</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);">112 µg ✓ aktualnie</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bot-nav">
+  <button class="nav-btn active" id="nav-today" onclick="goTo('today')"><span class="nav-ico">💊</span>Dzisiaj</button>
+  <button class="nav-btn" id="nav-inventory" onclick="goTo('inventory')"><span class="nav-ico">📦</span>Zapas</button>
+  <button class="nav-btn" id="nav-history" onclick="goTo('history')"><span class="nav-ico">📅</span>Historia</button>
+  <button class="nav-btn" id="nav-results" onclick="goTo('results')"><span class="nav-ico">🧬</span>Wyniki</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════ HELPERS ═══════════
+const PL_D = ['Nd','Pn','Wt','Śr','Cz','Pt','Sb'];
+const PL_M = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+const BSIZE = 25;
+const TSH_LOW = 0.27, TSH_HIGH = 4.94; // zakres ref z badania
+const OPERATION_DATE = '2023-03-28'; // tyreoidektomia 28.03.2023 — wole/guzki tarczycy
+
+// Historyczne wyniki TSH — zablokowane przed usunięciem (DEFAULT_TSH)
+const DEFAULT_TSH = [
+  { date: '2025-12-08', val: 5.8106, note: '', isDefault: true },
+  { date: '2025-06-10', val: 4.10, note: '', isDefault: true },
+  { date: '2025-05-29', val: 1.75, note: '', isDefault: true },
+  { date: '2024-06-20', val: 2.56, note: '', isDefault: true },
+  { date: '2024-03-13', val: 2.51, note: '', isDefault: true },
+  { date: '2023-11-09', val: 2.81, note: '', isDefault: true },
+  { date: '2023-05-18', val: 5.15, note: '', isDefault: true },
+  { date: '2022-08-26', val: 0.75, note: '', isDefault: true },
+  { date: '2021-02-18', val: 0.79, note: '', isDefault: true }
+];
+
+const $ = id => document.getElementById(id);
+
+function todayK() {
+  const d = new Date();
+  return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+}
+function p2(n) { return String(n).padStart(2,'0'); }
+function fmtD(s) { const d=new Date(s+'T12:00:00'); return d.getDate()+' '+PL_M[d.getMonth()]+' '+d.getFullYear(); }
+function addD(s,n) { const d=new Date(s+'T12:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate()); }
+function diffD(a,b) { return Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000); }
+function tshRefLow(t)  { return (t && t.refLow  > 0) ? t.refLow  : TSH_LOW; }
+function tshRefHigh(t) { return (t && t.refHigh > 0) ? t.refHigh : TSH_HIGH; }
+function tshClass(v, t)  { const lo=tshRefLow(t), hi=tshRefHigh(t); return v < lo ? 'low' : v > hi ? 'high' : 'normal'; }
+function tshLabel(v, t)  { const lo=tshRefLow(t), hi=tshRefHigh(t); return v < lo ? '↓ Poniżej normy' : v > hi ? '↑ Powyżej normy' : '✓ W normie'; }
+function tshRefStr(t)  { return `${tshRefLow(t).toFixed(2)}–${tshRefHigh(t).toFixed(2)}`; }
+function tshHasCustomRef(t) { return t && (t.refLow > 0 || t.refHigh > 0); }
+
+// ═══════════ STATE ═══════════
+let S = {
+  blister: 22, packs: 1, pack_size: 50, dose: 112,
+  receipt: '2026-07-09',
+  history: { '2026-04-23': true, '2026-04-24': true },
+  warn: 14, crit: 7,
+  notif: false,
+  tsh: [],
+  visits: [
+    { id: 1, title: 'Endokrynolog — dr Romanowski', date: '2026-06-24', alert: 21, note: 'Mieć wyniki badań gotowe (wykonaj do 10.06)' }
+  ]
+};
+
+function mergeTsh(savedTsh) {
+  // DEFAULT_TSH zawsze na końcu (sortowane desc), usuwamy duplikaty wg daty
+  const defaultDates = new Set(DEFAULT_TSH.map(t => t.date));
+  // Wyniki użytkownika = te z localStorage które NIE są w DEFAULT (user-added)
+  const userTsh = (savedTsh || []).filter(t => !t.isDefault && !defaultDates.has(t.date));
+  // Scal: user + default, posortuj desc
+  return [...userTsh, ...DEFAULT_TSH].sort((a,b) => b.date.localeCompare(a.date));
+}
+
+function loadS() {
+  try {
+    const r = localStorage.getItem('eth_v2');
+    if(r) {
+      const saved = JSON.parse(r);
+      const mergedHistory = Object.assign({}, S.history, saved.history || {});
+      const mergedTsh = mergeTsh(saved.tsh);
+      const mergedVisits = saved.visits || S.visits;
+      S = {...S, ...saved, history: mergedHistory, tsh: mergedTsh, visits: mergedVisits};
+    } else {
+      // Pierwsze uruchomienie — załaduj DEFAULT_TSH
+      S.tsh = mergeTsh([]);
+    }
+  } catch(e) {
+    S.tsh = mergeTsh([]);
+  }
+}
+// ═══════════ GIST SYNC ═══════════
+const GIST_ID    = 'd2562bf4a40b414818c82204d5b6e68f';
+const GIST_TOKEN = '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';
+const GIST_FILE  = 'euthyrox_data.json';
+let   gistTimer  = null;
+
+function buildGistPayload() {
+  const now = new Date();
+  return {
+    _info:     'Euthyrox Tracker — gist sync',
+    _date:     now.toISOString().split('T')[0],
+    _sync_time: now.toISOString(),
+    _version:  'eth_v2',
+    dose:      S.dose,
+    blister:   S.blister,
+    packs:     S.packs     || 0,
+    pack_size: S.pack_size || 50,
+    warn:      S.warn      || 14,
+    crit:      S.crit      || 7,
+    receipt:   S.receipt   || '',
+    tsh:       (S.tsh || []).map(t => ({
+      date: t.date, val: t.val, note: t.note || '',
+      ...(t.refLow    ? {refLow:  t.refLow}  : {}),
+      ...(t.refHigh   ? {refHigh: t.refHigh} : {}),
+      ...(t.isDefault ? {isDefault: true}    : {})
+    })),
+    visits:  S.visits  || [],
+    history: S.history || {}
+  };
+}
+
+async function syncToGist() {
+  try {
+    const payload = buildGistPayload();
+    await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `token ${GIST_TOKEN}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'EuthyroxTracker'
+      },
+      body: JSON.stringify({
+        files: { [GIST_FILE]: { content: JSON.stringify(payload, null, 2) } }
+      }),
+      signal: AbortSignal.timeout(8000)
+    });
+    console.log('[Gist] sync OK', payload._sync_time);
+  } catch(e) {
+    console.warn('[Gist] sync failed:', e.message);
+  }
+}
+
+function scheduleGistSync() {
+  clearTimeout(gistTimer);
+  gistTimer = setTimeout(syncToGist, 4000);
+}
+
+function saveS() {
+  try { localStorage.setItem('eth_v2', JSON.stringify(S)); } catch(e) {}
+  scheduleGistSync();
+}
+
+// ═══════════ COMPUTED ═══════════
+function total() { return S.blister + S.packs * S.pack_size; }
+function todayTaken() { return S.history[todayK()] === true; }
+
+function calcStreak() {
+  let n=0, d=todayK();
+  while(S.history[d]===true){ n++; d=addD(d,-1); }
+  return n;
+}
+
+function firstDay() {
+  const keys = Object.keys(S.history).sort();
+  return keys.length ? keys[0] : todayK();
+}
+
+function monthStats() {
+  const now=new Date(), pref=now.getFullYear()+'-'+p2(now.getMonth()+1);
+  let taken=0, missed=0;
+  const today=todayK();
+  const start=firstDay();
+  let d=new Date(now.getFullYear(), now.getMonth(), 1);
+  while(true) {
+    const k=d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+    if(!k.startsWith(pref)) break;
+    if(k < start) { d.setDate(d.getDate()+1); continue; }
+    if(S.history[k]===true) taken++;
+    else if(k < today) missed++;
+    d.setDate(d.getDate()+1);
+  }
+  return {taken, missed};
+}
+
+// ═══════════ ACTIONS ═══════════
+function takePill() {
+  if(todayTaken()) return;
+  S.history[todayK()] = true;
+  if(S.blister > 0) {
+    S.blister--;
+    if(S.blister === 0 && S.packs > 0) {
+      S.packs--; S.blister = BSIZE;
+      toast('Wzięte! Nowy blister otwarty 💊');
+    } else { toast('Wzięte! Tak trzymaj 💪'); }
+  } else { toast('Wzięte! Tak trzymaj 💪'); }
+  saveS(); renderAll();
+}
+
+function undoPill() {
+  if(!todayTaken()) return;
+  delete S.history[todayK()];
+  if(S.blister < BSIZE) S.blister++;
+  saveS(); renderAll(); toast('↩ Cofnięto');
+}
+
+function adj(key, delta) {
+  if(key==='blister') S.blister = Math.max(0, Math.min(BSIZE, S.blister+delta));
+  else if(key==='packs') S.packs = Math.max(0, S.packs+delta);
+  else if(key==='warn') S.warn = Math.max(S.crit+1, S.warn+delta);
+  else if(key==='crit') S.crit = Math.max(1, Math.min(S.warn-1, S.crit+delta));
+  saveS(); renderAll();
+}
+
+function adjDose(delta) {
+  S.dose = Math.max(25, Math.min(300, (S.dose||112)+delta));
+  saveS(); renderAll();
+}
+
+function cycleSize() {
+  const s=[25,50,100]; S.pack_size=s[(s.indexOf(S.pack_size)+1)%s.length];
+  saveS(); renderAll();
+}
+
+function saveReceipt() {
+  S.receipt = $('receipt-inp').value;
+  saveS(); renderAll(); toast('📅 Data recepty zapisana');
+}
+
+function renderReceiptStatus() {
+  if(!S.receipt) return;
+  const diff = diffD(todayK(), S.receipt);
+  const el = $('receipt-status');
+  const card = $('card-recepta');
+  if(!el || !card) return;
+  if(diff < 0) {
+    el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Recepta dostępna od ${Math.abs(diff)} dni — zadzwoń po teleporadę</span>`;
+    card.className = 'card card-green';
+  } else if(diff === 0) {
+    el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Recepta dostępna już DZIŚ!</span>`;
+    card.className = 'card card-green';
+  } else if(diff <= 7) {
+    el.innerHTML = `<span style="color:var(--yellow);font-weight:600;">⚠️ Recepta za ${diff} dni (${fmtD(S.receipt)})</span>`;
+    card.className = 'card card-yellow';
+  } else {
+    el.innerHTML = `<span style="color:var(--text3);">Dostępna za ${diff} dni (${fmtD(S.receipt)})</span>`;
+    card.className = 'card card-accent';
+  }
+}
+
+function resetData() {
+  if(!confirm('Usunąć wszystkie dane? Blister, historia, TSH — wszystko wróci do zera.\n\nHistoryczne wyniki TSH (zablokowane) zostaną zachowane.\n\nTa operacja jest nieodwracalna.')) return;
+  localStorage.removeItem('eth_v2');
+  S = { blister:25, packs:0, pack_size:50, dose:112, receipt:'', history:{}, warn:14, crit:7, notif:false, tsh:mergeTsh([]), visits:[] };
+  saveS(); renderAll(); toast('🗑 Dane wyczyszczone'); goTo('today');
+}
+
+// ═══════════ EKSPORT / IMPORT DANYCH ═══════════
+function exportData() {
+  const now = new Date();
+  const data = {
+    _info:      'Euthyrox Tracker — kopia zapasowa danych',
+    _date:      now.toISOString().split('T')[0],
+    _time:      now.toTimeString().slice(0,5),
+    _version:   'eth_v2',
+    dose:       S.dose,
+    blister:    S.blister,
+    packs:      S.packs || 0,
+    pack_size:  S.pack_size || 50,
+    warn:       S.warn || 14,
+    crit:       S.crit || 7,
+    receipt:    S.receipt || '',
+    tsh:        (S.tsh || []).map(t => ({
+      date:     t.date,
+      val:      t.val,
+      note:     t.note || '',
+      ...(t.refLow  ? {refLow:  t.refLow}  : {}),
+      ...(t.refHigh ? {refHigh: t.refHigh} : {}),
+      ...(t.isDefault ? {isDefault: true}  : {})
+    })),
+    visits:     S.visits || [],
+    history:    S.history || {}
+  };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'euthyrox_data.json';   // stała nazwa → łatwiej wrzucić na QNAP
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📤 Eksport gotowy — wrzuć euthyrox_data.json do QFile Pro → scripts/');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if(!data._version || data._version !== 'eth_v2') {
+          toast('⚠️ Nieznany format pliku'); return;
+        }
+        if(!confirm(`Wczytać dane z ${data._date}?\n\nTSH: ${(data.tsh||[]).length} wyników\nWizyty: ${(data.visits||[]).length}\nHistoria: ${Object.keys(data.history||{}).length} dni\n\nAktualne dane zostaną nadpisane.`)) return;
+        S = {...S, ...data};
+        S.tsh = mergeTsh(S.tsh); // Scal z DEFAULT_TSH po imporcie
+        saveS(); renderAll();
+        toast('✅ Dane przywrócone z kopii zapasowej');
+      } catch(err) {
+        toast('❌ Błąd wczytywania pliku');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ═══════════ TSH ACTIONS ═══════════
+function showAddTSH() {
+  $('add-tsh-form').style.display='block';
+  $('btn-add-tsh').style.display='none';
+  $('inp-tsh-date').value = todayK();
+  $('inp-tsh-val').focus();
+}
+function hideAddTSH() {
+  $('add-tsh-form').style.display='none';
+  $('btn-add-tsh').style.display='block';
+}
+function saveTSH() {
+  const val = parseFloat($('inp-tsh-val').value);
+  const date = $('inp-tsh-date').value;
+  const note = $('inp-tsh-note').value.trim();
+  const refLow  = parseFloat($('inp-tsh-ref-low').value);
+  const refHigh = parseFloat($('inp-tsh-ref-high').value);
+  if(isNaN(val)||val<=0) { toast('⚠️ Wpisz prawidłową wartość TSH'); return; }
+  if(!date) { toast('⚠️ Wybierz datę badania'); return; }
+  const entry = {date, val, note};
+  if(!isNaN(refLow) && refLow > 0)  entry.refLow  = refLow;
+  if(!isNaN(refHigh) && refHigh > 0) entry.refHigh = refHigh;
+  S.tsh.push(entry);
+  S.tsh = mergeTsh(S.tsh);
+  saveS(); hideAddTSH();
+  $('inp-tsh-val').value=''; $('inp-tsh-note').value='';
+  $('inp-tsh-ref-low').value=''; $('inp-tsh-ref-high').value='';
+  renderResults(); toast('✅ Wynik TSH zapisany');
+}
+function deleteTSH(idx) {
+  if(S.tsh[idx] && S.tsh[idx].isDefault) {
+    toast('🔒 Ten wynik jest zablokowany — historyczne dane medyczne');
+    return;
+  }
+  if(!confirm('Usunąć ten wynik TSH?')) return;
+  S.tsh.splice(idx,1); saveS(); renderResults();
+}
+
+// ═══════════ VISITS ACTIONS ═══════════
+function showAddVisit() {
+  $('add-visit-form').style.display='block';
+  $('btn-add-visit').style.display='none';
+  $('inp-visit-date').value='';
+}
+function hideAddVisit() {
+  $('add-visit-form').style.display='none';
+  $('btn-add-visit').style.display='block';
+}
+function saveVisit() {
+  const title = $('inp-visit-title').value.trim();
+  const date = $('inp-visit-date').value;
+  const alert = parseInt($('inp-visit-alert').value)||14;
+  const note = $('inp-visit-note').value.trim();
+  if(!title) { toast('⚠️ Wpisz nazwę wizyty'); return; }
+  if(!date) { toast('⚠️ Wybierz datę'); return; }
+  const id = Date.now();
+  S.visits.push({id, title, date, alert, note});
+  S.visits.sort((a,b)=>a.date.localeCompare(b.date));
+  saveS(); hideAddVisit();
+  $('inp-visit-title').value=''; $('inp-visit-note').value='';
+  renderResults(); toast('✅ Wizyta zapisana');
+}
+function deleteVisit(id) {
+  if(!confirm('Usunąć tę wizytę?')) return;
+  S.visits = S.visits.filter(v=>v.id!==id);
+  saveS(); renderResults();
+}
+
+// ═══════════ INSTALL PWA ═══════════
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  $('install-bar').style.display = 'flex';
+});
+window.addEventListener('appinstalled', () => {
+  $('install-bar').style.display = 'none';
+  toast('✅ Aplikacja zainstalowana!');
+});
+function installApp() {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => { deferredPrompt=null; $('install-bar').style.display='none'; });
+}
+
+// ═══════════ SERVICE WORKER ═══════════
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  navigator.serviceWorker.addEventListener('message', e => {
+    if(e.data && e.data.action === 'take_pill') takePill();
+  });
+}
+
+// ═══════════ NAV ═══════════
+function goTo(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  $('view-'+view).classList.add('active');
+  $('nav-'+view).classList.add('active');
+  if(view==='history') renderHistory();
+  if(view==='inventory') renderInventory();
+  if(view==='results') renderResults();
+}
+
+// ═══════════ TOAST ═══════════
+let toastT;
+function toast(msg) {
+  const el=$('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+// ═══════════ RENDER ═══════════
+function renderAll() {
+  renderHeader(); renderToday(); renderInventory(); renderReceiptStatus();
+  if($('view-history').classList.contains('active')) renderHistory();
+  if($('view-results').classList.contains('active')) renderResults();
+}
+
+// ═══════════ THEME ═══════════
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = $('theme-btn');
+  if(btn) btn.textContent = theme==='light' ? '🌙' : '☀️';
+  // theme-color meta
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content = theme==='light' ? '#ede8de' : '#0a0f1e';
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current==='light' ? 'dark' : 'light';
+  localStorage.setItem('eth_theme', next);
+  applyTheme(next);
+}
+function initTheme() {
+  const saved = localStorage.getItem('eth_theme') || 'dark';
+  applyTheme(saved);
+}
+
+function renderHeader() {
+  const d=new Date();
+  $('hdr-date').innerHTML = PL_D[d.getDay()]+', '+d.getDate()+' '+PL_M[d.getMonth()]+'<br>'+d.getFullYear();
+  $('hdr-sub').textContent = 'N '+(S.dose||112)+' · na czczo · codziennie';
+}
+
+function renderToday() {
+  const taken=todayTaken();
+  const d=new Date();
+  $('today-lbl').textContent = PL_D[d.getDay()].toUpperCase()+', '+d.getDate()+' '+PL_M[d.getMonth()].toUpperCase();
+
+  const btn=$('btn-take'), undo=$('btn-undo');
+  if(taken) {
+    $('s-orb').textContent='✅'; $('s-title').textContent='Wzięte! Dobra robota';
+    $('fs-status').textContent='dzisiaj ✓';
+    btn.className='fs-big-btn ok'; btn.onclick=null;
+    undo.style.display='block';
+  } else {
+    $('s-orb').textContent='💊'; $('s-title').textContent='Wziąłem tabletkę';
+    $('fs-status').textContent='';
+    btn.className='fs-big-btn'; btn.onclick=takePill;
+    undo.style.display='none';
+  }
+
+  const svbl=$('sv-blister');
+  svbl.textContent=S.blister;
+  svbl.className='fs-num '+(S.blister<=5?'danger':S.blister<=8?'warn':'');
+  const streak = calcStreak();
+  $('streak-n').textContent = streak;
+  const streakEl = $('streak-n').parentElement;
+  if(streak >= 30) { streakEl.textContent=''; streakEl.innerHTML='🏆<span id="streak-n">'+streak+'</span>'; streakEl.style.animation='pulse 1.5s ease-in-out infinite'; }
+  else if(streak >= 7) { streakEl.style.animation='pulse 2s ease-in-out infinite'; }
+  else { streakEl.style.animation='none'; }
+  const tot=total();
+  const sv=$('sv-total');
+  sv.textContent=tot;
+  sv.className='fs-num '+(tot<=S.crit?'danger':tot<=S.warn?'warn':'');
+  $('blister-ends').textContent = S.blister>0 ? 'blister: '+fmtD(addD(todayK(), S.blister)) : '⚠️ blister pusty!';
+
+  const ri=$('receipt-info');
+  if(S.receipt){
+    const diff=diffD(todayK(), S.receipt);
+    if(diff<0) ri.textContent='recepta: TERAZ!';
+    else ri.textContent='recepta: za '+diff+' dni';
+  } else { ri.textContent=''; }
+
+  renderAlerts(tot);
+  renderBlister();
+  renderTSHToday();
+  renderNextVisitBar();
+}
+
+function renderTSHToday() {
+  const w = $('tsh-today-widget');
+  if(!w) return;
+  if(!S.tsh || S.tsh.length === 0) { w.innerHTML = ''; return; }
+  const latest = S.tsh[0];
+  const cls = tshClass(latest.val, latest);
+  const lbl = cls === 'normal' ? '✓ W normie' : cls === 'high' ? '↑ Powyżej normy' : '↓ Poniżej normy';
+  const borderColor = cls === 'normal' ? 'var(--green)' : cls === 'high' ? 'var(--red)' : 'var(--yellow)';
+  w.innerHTML = `<div class="tsh-today" style="border-left:3px solid ${borderColor}">
+    <div class="tsh-today-left">
+      <div class="tsh-today-ico">🧬</div>
+      <div>
+        <div class="tsh-today-label">TSH — ostatni wynik</div>
+        <div class="tsh-today-sub">${fmtD(latest.date)} · ${lbl}</div>
+      </div>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div class="tsh-today-val ${cls}">${latest.val.toFixed(2)}</div>
+      <div class="tsh-today-unit">uIU/ml</div>
+    </div>
+  </div>`;
+}
+
+function renderNextVisitBar() {
+  const bar = $('next-visit-bar');
+  if(!bar) return;
+  const today = todayK();
+  // Znajdź najbliższą przyszłą wizytę
+  const upcoming = (S.visits||[])
+    .filter(v => diffD(today, v.date) >= 0)
+    .sort((a,b) => a.date.localeCompare(b.date))[0];
+  // Fallback: hardcoded endokrynolog
+  const endoDiff = diffD(today, '2026-06-24');
+  if(!upcoming && endoDiff < 0) { bar.style.display='none'; return; }
+  const visit = upcoming || { title: 'Endokrynolog — dr Romanowski', date: '2026-06-24', note: '' };
+  const diff = diffD(today, visit.date);
+  if(diff < 0) { bar.style.display='none'; return; }
+  const color = diff<=7 ? 'var(--red)' : diff<=14 ? 'var(--yellow)' : 'var(--accent)';
+  bar.style.display = 'block';
+  bar.innerHTML = `<div class="next-visit-bar" style="border-left:3px solid ${color}">
+    <div class="nv-left">
+      <div class="nv-ico">🏥</div>
+      <div>
+        <div class="nv-title">${visit.title}</div>
+        <div class="nv-sub">${fmtD(visit.date)}</div>
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0">
+      <div class="nv-days" style="color:${color}">${diff}</div>
+      <div class="nv-days-lbl">dni</div>
+    </div>
+  </div>`;
+}
+
+function renderAlerts(tot) {
+  const z=$('alert-zone'); z.innerHTML='';
+  if(tot<=S.crit) {
+    z.innerHTML+=`<div class="alert danger"><strong>Krytyczny poziom zapasu!</strong>Zostało tylko ${tot} dni tabletek.</div>`;
+  } else if(tot<=S.warn) {
+    z.innerHTML+=`<div class="alert warn"><strong>Niski zapas — czas działać</strong>Zostało ${tot} dni.</div>`;
+  }
+  if(S.receipt) {
+    const diff=diffD(todayK(), S.receipt);
+    if(diff<0) z.innerHTML+=`<div class="alert ok"><strong>Możesz odebrać receptę!</strong>Limit NFZ minął.</div>`;
+    else if(diff<=14) z.innerHTML+=`<div class="alert ok"><strong>Recepta za ${diff} dni</strong>${fmtD(S.receipt)}</div>`;
+  }
+  // Alert z wizyt w Dzisiaj — 3 poziomy: 21d info, 14d warn, 7d danger
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(todayK(), v.date);
+    if(diff<0 || diff>21) return;
+    const cls=diff<=7?'danger':diff<=14?'warn':'info';
+    const ico=diff<=7?'🚨':diff<=14?'⚠️':'📅';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} za ${diff} dni</strong>${v.note||''}</div>`;
+  });
+  // Alert badania lab (stały, hardcoded)
+  const diffLab=diffD(todayK(),'2026-06-10');
+  if(diffLab>=0 && diffLab<=21) {
+    const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${diffLab<=7?'🚨':'🔬'} Badania przed endokrynologiem — ${diffLab} dni</strong>Wykonaj do 10.06 · wizyta 24.06.2026</div>`;
+  }
+}
+
+function renderBlister() {
+  const used = BSIZE - S.blister;
+  const g=$('blister'); g.innerHTML='';
+  for(let i=1;i<=BSIZE;i++){
+    const el=document.createElement('div');
+    if(i<=used){ el.className='pill used'; el.textContent='✓'; }
+    else { el.className='pill avail'; el.textContent=i; }
+    g.appendChild(el);
+  }
+}
+
+function renderInventory() {
+  $('cv-bl').textContent=S.blister;
+  $('cv-pk').textContent=S.packs;
+  $('cv-sz').textContent=S.pack_size;
+  $('cv-dose').textContent=(S.dose||112);
+  $('cv-warn').textContent=S.warn;
+  $('cv-crit').textContent=S.crit;
+  if(S.receipt) $('receipt-inp').value=S.receipt;
+}
+
+function renderHistory() {
+  const h=$('hist30'); h.innerHTML='';
+  const today=todayK();
+  const start=firstDay();
+  for(let i=29;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const k=d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+    const el=document.createElement('div'); el.className='hday';
+    const fut=k>today, beforeStart=k<start;
+    if(!fut&&!beforeStart&&S.history[k]===true) el.classList.add('ok');
+    else if(!fut&&!beforeStart&&k<today) el.classList.add('miss');
+    if(fut||beforeStart) el.classList.add('fut');
+    if(k===today) el.classList.add('tod');
+    el.textContent=d.getDate();
+    h.appendChild(el);
+  }
+  const ms=monthStats();
+  $('s-taken').textContent=ms.taken+' dni';
+  $('s-miss').textContent=ms.missed ? ms.missed+' dni' : '0 — ideał! 🎯';
+  $('s-long').textContent=calcStreak()+' dni';
+  const start2=firstDay();
+  const daysSinceStart=Math.max(1, diffD(start2, today)+1);
+  const takenTotal=Object.values(S.history).filter(v=>v).length;
+  $('s-eff').textContent=Math.round(takenTotal/daysSinceStart*100)+'%';
+  $('s-since').textContent=fmtD(start2)+' ('+( diffD(start2,today)+1)+' dni)';
+}
+
+function renderResults() {
+  renderVisitAlerts();
+  renderTSHCurrent();
+  renderTSHChart();
+  renderTSHHistory();
+  renderVisitsList();
+}
+
+// ═══════════ TSH CHART ═══════════
+function renderTSHChart() {
+  const svg = document.getElementById('tsh-chart');
+  if(!svg) return;
+
+  // Tylko wyniki posortowane rosnąco (chronologicznie)
+  const pts = [...(S.tsh||[])].sort((a,b) => a.date.localeCompare(b.date));
+  if(pts.length < 2) {
+    svg.style.display = 'none';
+    return;
+  }
+  svg.style.display = 'block';
+
+  // Wymiary
+  const W = 320, H = 160, PL = 36, PR = 12, PT = 16, PB = 32;
+  const cw = W - PL - PR, ch = H - PT - PB;
+
+  // Zakresy wartości
+  const vals = pts.map(p => p.val);
+  const vMin = Math.max(0, Math.min(...vals) - 0.5);
+  const vMax = Math.min(12, Math.max(...vals) + 0.5);
+
+  // Daty → x
+  const dates = pts.map(p => new Date(p.date).getTime());
+  const dMin = dates[0], dMax = dates[dates.length-1];
+  const dRange = dMax - dMin || 1;
+
+  const toX = d  => PL + ((new Date(d).getTime() - dMin) / dRange) * cw;
+  const toY = v  => PT + ch - ((v - vMin) / (vMax - vMin)) * ch;
+
+  // Norma globalna (0.27–4.94) jako zielona strefa
+  const normLo = TSH_LOW, normHi = TSH_HIGH;
+  const nyTop = toY(Math.min(normHi, vMax));
+  const nyBot = toY(Math.max(normLo, vMin));
+
+  // Kolor CSS zmiennych — pobierz z root
+  const cs = getComputedStyle(document.documentElement);
+  const cGreen   = cs.getPropertyValue('--green').trim()   || '#22c55e';
+  const cRed     = cs.getPropertyValue('--red').trim()     || '#ef4444';
+  const cAccent  = cs.getPropertyValue('--accent').trim()  || '#4a9eff';
+  const cText3   = cs.getPropertyValue('--text3').trim()   || '#6a80a8';
+  const cBorder  = cs.getPropertyValue('--border2').trim() || 'rgba(255,255,255,0.14)';
+  const cBg3     = cs.getPropertyValue('--bg3').trim()     || '#151d35';
+  const cYellow  = cs.getPropertyValue('--yellow').trim()  || '#f59e0b';
+
+  // Linia operacji x
+  const opDate = new Date(OPERATION_DATE).getTime();
+  const opX = PL + ((opDate - dMin) / dRange) * cw;
+
+  // Polyline punkty
+  const linePoints = pts.map(p => `${toX(p.date).toFixed(1)},${toY(p.val).toFixed(1)}`).join(' ');
+
+  // Znaczniki rok (co rok)
+  const yearLabels = [];
+  const years = [...new Set(pts.map(p => p.date.slice(0,4)))];
+  years.forEach(y => {
+    const x = toX(y + '-07-01');
+    if(x > PL + 10 && x < W - PR - 10)
+      yearLabels.push(`<text x="${x.toFixed(0)}" y="${H-4}" font-size="8" fill="${cText3}" text-anchor="middle" font-family="JetBrains Mono,monospace">${y}</text>`);
+  });
+
+  // Y-axis labels
+  const yLabels = [];
+  [1,2,3,4,5,6,8,10].forEach(v => {
+    if(v >= vMin && v <= vMax) {
+      const y = toY(v);
+      yLabels.push(`<text x="${PL-4}" y="${y.toFixed(0)}" font-size="8" fill="${cText3}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace">${v}</text>`);
+      yLabels.push(`<line x1="${PL}" y1="${y.toFixed(0)}" x2="${W-PR}" y2="${y.toFixed(0)}" stroke="${cBorder}" stroke-width="0.5"/>`);
+    }
+  });
+
+  // Punkty na wykresie
+  const circles = pts.map((p,i) => {
+    const x = toX(p.date), y = toY(p.val);
+    const cls = tshClass(p.val, p);
+    const col = cls==='high' ? cRed : cls==='low' ? cYellow : cGreen;
+    const isPostOp = p.date > OPERATION_DATE;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i===pts.length-1?5:3.5}" fill="${col}" stroke="var(--bg)" stroke-width="1.5"/>`;
+  });
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', H);
+  svg.style.maxWidth = W + 'px';
+
+  svg.innerHTML = `
+    <!-- Tło normy -->
+    <rect x="${PL}" y="${nyTop.toFixed(1)}" width="${cw}" height="${(nyBot-nyTop).toFixed(1)}" fill="${cGreen}" fill-opacity="0.08" rx="2"/>
+
+    <!-- Linie siatki Y -->
+    ${yLabels.join('\n')}
+
+    <!-- Linia operacji -->
+    ${opX > PL && opX < W-PR ? `
+    <line x1="${opX.toFixed(1)}" y1="${PT}" x2="${opX.toFixed(1)}" y2="${H-PB}" stroke="${cAccent}" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+    <text x="${(opX+3).toFixed(0)}" y="${PT+10}" font-size="7" fill="${cAccent}" font-family="JetBrains Mono,monospace" opacity="0.8">op.</text>
+    ` : ''}
+
+    <!-- Linia normy top/bot -->
+    <line x1="${PL}" y1="${nyTop.toFixed(1)}" x2="${W-PR}" y2="${nyTop.toFixed(1)}" stroke="${cGreen}" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+    <line x1="${PL}" y1="${nyBot.toFixed(1)}" x2="${W-PR}" y2="${nyBot.toFixed(1)}" stroke="${cGreen}" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.5"/>
+
+    <!-- Linia danych -->
+    <polyline points="${linePoints}" fill="none" stroke="${cAccent}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+
+    <!-- Punkty -->
+    ${circles.join('\n')}
+
+    <!-- Etykiety lat -->
+    ${yearLabels.join('\n')}
+
+    <!-- Etykieta normy -->
+    <text x="${W-PR-2}" y="${((nyTop+nyBot)/2).toFixed(0)}" font-size="7" fill="${cGreen}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace" opacity="0.7">norma</text>
+  `;
+}
+
+function renderVisitAlerts() {
+  const z=$('visit-alerts-zone'); z.innerHTML='';
+  const today=todayK();
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(today, v.date);
+    if(diff<0) return; // minęła
+    if(diff<=v.alert) {
+      const cls=diff<=3?'danger':diff<=7?'warn':'info';
+      const ico=diff<=3?'🚨':diff<=7?'⚠️':'📅';
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+    }
+  });
+  // Dynamiczne alerty wizyt — 3 poziomy
+  (S.visits||[]).forEach(v=>{
+    const diff=diffD(today, v.date);
+    if(diff<0 || diff>21) return;
+    const cls=diff<=7?'danger':diff<=14?'warn':'info';
+    const ico=diff<=7?'🚨':diff<=14?'⚠️':'📅';
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+  });
+  // Stały alert badania lab przed wizytą 24.06
+  const diffEndo=diffD(today,'2026-06-24');
+  const diffLab=diffD(today,'2026-06-10');
+  if(diffEndo>0 && diffEndo<=60) {
+    if(diffLab>=0) {
+      const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
+      const ico=diffLab<=7?'🚨':diffLab<=14?'⚠️':'🔬';
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} Badania przed endokrynologiem — wykonaj do 10.06.2026</strong>Wizyta za ${diffEndo} dni · zostało ${diffLab} dni na laboratorium</div>`;
+    } else {
+      z.innerHTML+=`<div class="alert danger"><strong>🚨 Termin badań minął! Wizyta za ${diffEndo} dni</strong>Zrób badania natychmiast — KORLAB</div>`;
+    }
+  }
+}
+
+function renderTSHCurrent() {
+  const el=$('tsh-current-content');
+  const card=$('tsh-current-card');
+  if(!S.tsh||S.tsh.length===0) {
+    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników — dodaj poniżej</div>';
+    card.className='card card-accent';
+    return;
+  }
+  const latest=S.tsh[0]; // już posortowane desc
+  const cls=tshClass(latest.val, latest);
+  const lbl=tshLabel(latest.val, latest);
+  // Accent bar kolor zależnie od wyniku
+  card.className = cls==='normal' ? 'card card-green' : cls==='high' ? 'card card-red' : 'card card-yellow';
+
+  // Bar chart — używa normy per-wynik
+  const refLo = tshRefLow(latest), refHi = tshRefHigh(latest);
+  const barMax=10, pct=Math.min(100, (latest.val/barMax)*100);
+  const normLeft=(refLo/barMax)*100, normWidth=((refHi-refLo)/barMax)*100;
+  const customRef = tshHasCustomRef(latest) ? ` <span style="font-size:10px;color:var(--text3)">(norma tego lab.)</span>` : '';
+
+  el.innerHTML=`
+    <div class="tsh-current">
+      <div class="tsh-big ${cls}">${latest.val.toFixed(2)}</div>
+      <div class="tsh-meta">
+        <span class="tsh-unit">uIU/ml</span>
+        <span class="tsh-status-badge ${cls}">${lbl}</span>
+        <span class="tsh-date">${fmtD(latest.date)}</span>
+        ${latest.note?`<span style="font-size:11px;color:var(--text3);margin-top:2px;">${latest.note}</span>`:''}
+      </div>
+    </div>
+    <div class="tsh-bar-wrap">
+      <div class="tsh-bar-track">
+        <div class="tsh-bar-normal" style="left:${normLeft}%;width:${normWidth}%"></div>
+        <div class="tsh-bar-marker" style="left:${pct}%"></div>
+      </div>
+      <div class="tsh-bar-labels">
+        <span>0</span><span style="color:var(--green)">norma ${refLo}–${refHi}${customRef}</span><span>10+</span>
+      </div>
+    </div>`;
+}
+
+function renderTSHHistory() {
+  const el=$('tsh-history-list');
+  if(!S.tsh||S.tsh.length===0) {
+    el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0;">Brak wpisów</div>';
+    return;
+  }
+  // Buduj listę z separatorami epok
+  let html = '';
+  let shownPostOp = false;
+  let shownPreOp = false;
+
+  S.tsh.forEach((t, i) => {
+    const isPostOp = t.date > OPERATION_DATE;
+    const isPreOp  = t.date < OPERATION_DATE;
+
+    // Separator "PO OPERACJI" — przed pierwszym wynikiem po operacji
+    if(isPostOp && !shownPostOp) {
+      shownPostOp = true;
+      html += `<div class="tsh-era-sep">
+        <div class="tsh-era-line"></div>
+        <span class="tsh-era-label post-op">🏥 Po operacji (od kwi 2023)</span>
+        <div class="tsh-era-line"></div>
+      </div>`;
+    }
+
+    // Separator "PRZED OPERACJĄ" — przed pierwszym wynikiem sprzed operacji
+    if(isPreOp && !shownPreOp) {
+      shownPreOp = true;
+      html += `<div class="tsh-era-sep">
+        <div class="tsh-era-line"></div>
+        <span class="tsh-era-label pre-op">📋 Przed operacją</span>
+        <div class="tsh-era-line"></div>
+      </div>`;
+    }
+
+    const cls = tshClass(t.val, t);
+    const eraClass = isPostOp ? 'post-op' : (isPreOp ? 'pre-op' : '');
+    const eraTxt   = isPostOp ? 'po op' : (isPreOp ? 'przed op' : '');
+    const eraBadge = eraClass ? `<span class="tsh-era-badge ${eraClass}">${eraTxt}</span>` : '';
+    const lockOrDel = t.isDefault
+      ? ''
+      : `<button class="tsh-del-btn" onclick="deleteTSH(${i})">✕</button>`;
+
+    const refInfo = tshHasCustomRef(t)
+      ? `<span style="color:var(--text3);font-size:10px;font-family:'JetBrains Mono',monospace;"> · norma ${tshRefStr(t)}</span>`
+      : '';
+    const noteInfo = t.note ? ` · ${t.note}` : '';
+
+    html += `<div class="tsh-entry">
+      <div>
+        <div class="tsh-entry-val ${cls}">${t.val.toFixed(t.val % 1 === 0 ? 2 : (String(t.val).split('.')[1]||'').length > 2 ? 4 : 2)} uIU/ml${eraBadge}</div>
+        <div class="tsh-entry-info">${fmtD(t.date)}${noteInfo}${refInfo}</div>
+      </div>
+      ${lockOrDel}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function renderVisitsList() {
+  const el=$('visits-list');
+  const today=todayK();
+  const future=(S.visits||[]).filter(v=>v.date>=today);
+  if(future.length===0) {
+    el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0;">Brak nadchodzących wizyt</div>';
+    return;
+  }
+  el.innerHTML=future.map(v=>{
+    const diff=diffD(today,v.date);
+    const cls=diff<=3?'urgent':diff<=14?'soon':'ok';
+    const ico=diff<=7?'🚨':diff<=30?'📅':'🏥';
+    return `
+    <div class="visit-item">
+      <div class="visit-icon">${ico}</div>
+      <div class="visit-info">
+        <div class="visit-title">${v.title}</div>
+        <div class="visit-date">${fmtD(v.date)}</div>
+        <div class="visit-countdown ${cls}">za ${diff} dni${v.note?' · '+v.note:''}</div>
+      </div>
+      <button class="visit-del" onclick="deleteVisit(${v.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════ INIT ═══════════
+initTheme();
+loadS();
+renderAll();
+setInterval(renderHeader, 60000);
+
+</script>
+</body>
+</html>
