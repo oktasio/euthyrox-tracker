@@ -1,4 +1,4 @@
-const CACHE = 'euthyrox-v3';
+const CACHE = 'euthyrox-v4';
 const ASSETS = [
   '/euthyrox-tracker/',
   '/euthyrox-tracker/index.html',
