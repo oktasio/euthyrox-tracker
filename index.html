@@ -17,7 +17,7 @@
   --bg: #0a0f1e; --bg2: #0f1628; --bg3: #151d35;
   --card: #1a2340; --card2: #1f2a4a;
   --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
-  --text: #e8edf8; --text2: #a0b0d0; --text3: #6a80a8;
+  --text: #eef2fc; --text2: #b8c8e4; --text3: #8090b8;
   --accent: #4a9eff; --accent2: #2d7dd6;
   --green: #22c55e; --green-bg: rgba(34,197,94,0.12); --green-border: rgba(34,197,94,0.3);
   --yellow: #f59e0b; --yellow-bg: rgba(245,158,11,0.12); --yellow-border: rgba(245,158,11,0.3);
@@ -62,7 +62,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 .hdr-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent) 0%, #6c63ff 100%); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 2px 8px rgba(74,158,255,0.35); }
 .hdr-name { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
 .hdr-sub { font-size: 11px; color: var(--text2); font-family: 'JetBrains Mono', monospace; margin-top: 1px; }
-.hdr-date { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text3); line-height: 1.5; }
+.hdr-date { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); line-height: 1.5; }
 
 /* BOTTOM NAV */
 .bot-nav {
@@ -106,6 +106,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 .alert.warn { background: var(--yellow-bg); border-color: var(--yellow-border); color: var(--yellow); }
 .alert.danger { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
 .alert.ok { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.alert.info { background: rgba(74,158,255,0.08); border-color: rgba(74,158,255,0.25); color: var(--accent); }
 .alert.info { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); }
 .alert strong { display: block; font-weight: 600; margin-bottom: 2px; }
 
@@ -255,17 +256,17 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 .visit-countdown { font-size: 11px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
 .visit-countdown.soon { color: var(--yellow); }
 .visit-countdown.urgent { color: var(--red); }
-.visit-countdown.ok { color: var(--text3); }
+.visit-countdown.ok { color: var(--text2); }
 .visit-del { padding: 4px 10px; border-radius: var(--r-xs); border: 1px solid var(--border); background: transparent; color: var(--text3); font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 
 /* OTHER RESULTS */
 .result-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .result-item:last-child { border-bottom: none; }
-.result-name { font-size: 12px; color: var(--text2); }
-.result-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
+.result-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.result-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; }
 .result-val.normal { color: var(--green); }
 .result-val.abnormal { color: var(--red); }
-.result-ref { font-size: 10px; color: var(--text3); margin-top: 1px; font-family: 'JetBrains Mono', monospace; }
+.result-ref { font-size: 11px; color: var(--text2); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -507,18 +508,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
       <div id="other-results">
         <div class="result-item">
           <div><div class="result-name">FT4-wolne</div><div class="result-ref">ref: 0.7–1.48 ng/dL</div></div>
-          <div style="text-align:right"><div class="result-val normal">0.99</div><div style="font-size:10px;color:var(--text3);">ng/dL</div></div>
+          <div style="text-align:right"><div class="result-val normal">0.99</div><div style="font-size:11px;color:var(--text2);">ng/dL</div></div>
         </div>
         <div class="result-item">
           <div><div class="result-name">FT3-wolne</div><div class="result-ref">ref: 1.71–3.71 pg/mL</div></div>
-          <div style="text-align:right"><div class="result-val normal">2.80</div><div style="font-size:10px;color:var(--text3);">pg/mL</div></div>
+          <div style="text-align:right"><div class="result-val normal">2.80</div><div style="font-size:11px;color:var(--text2);">pg/mL</div></div>
         </div>
         <div class="result-item">
           <div><div class="result-name">Wapń całkowity</div><div class="result-ref">ref: 9–10.2 mg/dL ↓</div></div>
-          <div style="text-align:right"><div class="result-val abnormal">8.9</div><div style="font-size:10px;color:var(--text3);">mg/dL</div></div>
+          <div style="text-align:right"><div class="result-val abnormal">8.9</div><div style="font-size:11px;color:var(--text2);">mg/dL</div></div>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-top:10px;">Lekarz: dr Romanowski · Rudzkie Lab. Analityczno-Bakteriologiczne</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:10px;">Lekarz: dr Romanowski · Rudzkie Lab. Analityczno-Bakteriologiczne</div>
     </div>
 
     <!-- WIZYTY I BADANIA -->
@@ -585,8 +586,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
         5. TSH<br>
         6. Wapń całkowity (surowica)
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-top:8px;">Skierowanie: dr Romanowski · KORLAB · nr 0000000000081501493593</div>
-      <div style="font-size:11px;color:var(--purple);margin-top:6px;font-weight:600;">⚠️ Wykonaj min. 2 tygodnie przed wizytą 24.06.2026 → do 10.06.2026</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:8px;">Skierowanie: dr Romanowski · KORLAB · nr 0000000000081501493593</div>
+      <div style="font-size:12px;color:var(--purple);margin-top:6px;font-weight:600;">⚠️ Wykonaj min. 2 tygodnie przed wizytą 24.06.2026 → do 10.06.2026</div>
     </div>
 
     <!-- ROZPOZNANIA ICD-10 -->
@@ -630,43 +631,43 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
         <!-- BIOPSJA -->
         <div style="position:relative;margin-bottom:20px;">
           <div style="position:absolute;left:-22px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--text3);border:2px solid var(--bg);"></div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">wrz 2022</div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);">🔬 Biopsja tarczycy</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.6;">
-            Prawy płat: 06.09.2022 · Lewy płat: 02.09.2022<br>
-            <span style="color:var(--text3);">Wynik: wole guzkowe — kwalifikacja do operacji</span>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:600;">wrz 2022</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">🔬 Biopsja tarczycy</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:3px;line-height:1.7;">
+            Lewy płat: 02.09.2022 · Prawy płat: 06.09.2022<br>
+            <span style="color:var(--text2);">Wynik: wole guzkowe — kwalifikacja do operacji</span>
           </div>
         </div>
 
         <!-- OPERACJA -->
         <div style="position:relative;margin-bottom:20px;">
           <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);"></div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">28.03.2023</div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);">🏥 Tyreoidektomia</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.6;">Całkowite usunięcie płata lewego z cieśnią i fragmentami płata prawego</div>
-          <div style="margin-top:6px;padding:5px 8px;border-radius:6px;background:var(--bg3);display:inline-flex;align-items:center;gap:8px;">
-            <span style="font-size:10px;color:var(--text3);">Grupa krwi oznaczona podczas zabiegu</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--red);">B Rh+</span>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:600;">28.03.2023</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">🏥 Tyreoidektomia</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:3px;line-height:1.7;">Całkowite usunięcie płata lewego z cieśnią i fragmentami płata prawego</div>
+          <div style="margin-top:6px;padding:6px 10px;border-radius:6px;background:var(--bg3);display:inline-flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;color:var(--text2);">Grupa krwi oznaczona podczas zabiegu</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--red);">B Rh+</span>
           </div>
         </div>
 
         <!-- DAWKOWANIE -->
         <div style="position:relative;">
           <div style="position:absolute;left:-22px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--bg);"></div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px;">04.04.2023 — dziś</div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);">💊 Euthyrox — historia dawkowania</div>
-          <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:var(--bg3);">
-              <span style="font-size:11px;color:var(--text3);">04.04.2023 – 09.12.2025</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--text2);">100 µg</span>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:600;">04.04.2023 — dziś</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">💊 Euthyrox — historia dawkowania</div>
+          <div style="margin-top:6px;display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:6px;background:var(--bg3);">
+              <span style="font-size:12px;color:var(--text2);">04.04.2023 – 09.12.2025</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--text);">100 µg</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:var(--bg3);">
-              <span style="font-size:11px;color:var(--text3);">10.12.2025 – 31.12.2025</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--yellow);">100 / 112 µg</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:6px;background:var(--bg3);">
+              <span style="font-size:12px;color:var(--text2);">10.12.2025 – 31.12.2025</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--yellow);">100 / 112 µg</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);">
-              <span style="font-size:11px;color:var(--text3);">od 01.01.2026</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);">112 µg ✓ aktualnie</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:6px;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);">
+              <span style="font-size:12px;color:var(--text2);">od 01.01.2026</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--accent);">112 µg ✓ aktualnie</span>
             </div>
           </div>
         </div>
@@ -767,9 +768,9 @@ function loadS() {
 }
 // ═══════════ GIST SYNC ═══════════
 const GIST_ID    = 'd2562bf4a40b414818c82204d5b6e68f';
-const GIST_TOKEN = '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';
 const GIST_FILE  = 'euthyrox_data.json';
 let   gistTimer  = null;
+function getGistToken() { return localStorage.getItem('gist_token') || ''; }
 
 function buildGistPayload() {
   const now = new Date();
@@ -802,7 +803,7 @@ async function syncToGist() {
     await fetch(`https://api.github.com/gists/${GIST_ID}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `token ${GIST_TOKEN}`,
+        'Authorization': `token ${getGistToken()}`,
         'Content-Type': 'application/json',
         'User-Agent': 'EuthyroxTracker'
       },
@@ -1082,7 +1083,7 @@ function installApp() {
 
 // ═══════════ SERVICE WORKER ═══════════
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  navigator.serviceWorker.register('/euthyrox-tracker/sw.js').catch(()=>{});
   navigator.serviceWorker.addEventListener('message', e => {
     if(e.data && e.data.action === 'take_pill') takePill();
   });
@@ -1170,12 +1171,13 @@ function renderToday() {
   const sv=$('sv-total');
   sv.textContent=tot;
   sv.className='fs-num '+(tot<=S.crit?'danger':tot<=S.warn?'warn':'');
-  $('blister-ends').textContent = S.blister>0 ? 'blister: '+fmtD(addD(todayK(), S.blister)) : '⚠️ blister pusty!';
+  $('blister-ends').textContent = S.blister>0 ? 'kończy się: '+fmtD(addD(todayK(), S.blister-1)) : '⚠️ blister pusty!';
 
   const ri=$('receipt-info');
   if(S.receipt){
     const diff=diffD(todayK(), S.receipt);
     if(diff<0) ri.textContent='recepta: TERAZ!';
+    else if(diff===0) ri.textContent='recepta: DZIŚ!';
     else ri.textContent='recepta: za '+diff+' dni';
   } else { ri.textContent=''; }
 
