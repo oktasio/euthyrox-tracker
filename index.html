@@ -413,14 +413,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
     </div>
     <div class="card card-accent">
       <div class="slbl" style="color:var(--accent);">Kopia zapasowa</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6;">Eksportuj historię TSH, wizyty i dawki do pliku JSON. Przechowaj w chmurze — to Twoje archiwum medyczne.</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.6;">Eksportuj historię TSH, wizyty i dawki do pliku JSON. Przechowaj w chmurze - to Twoje archiwum medyczne.</div>
       <button class="btn-main" style="margin-bottom:8px;" onclick="exportData()">📤 Eksportuj dane (JSON)</button>
       <button class="btn-sec" onclick="importData()">📥 Importuj dane z pliku</button>
     </div>
 
     <div class="card card-red">
       <div class="slbl" style="color:var(--red);">Dane</div>
-      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.5;">Jeśli historia pokazuje błędne wartości — zresetuj dane i wprowadź od nowa.</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.5;">Jeśli historia pokazuje błędne wartości - zresetuj dane i wprowadź od nowa.</div>
       <button class="btn-main" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);" onclick="resetData()">🗑 Wyczyść dane aplikacji</button>
     </div>
   </div>
@@ -449,15 +449,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 
     <!-- TSH AKTUALNY -->
     <div class="card card-accent" id="tsh-current-card">
-      <div class="slbl">TSH — ostatni wynik</div>
+      <div class="slbl">TSH - ostatni wynik</div>
       <div id="tsh-current-content">
-        <div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników — dodaj poniżej</div>
+        <div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników - dodaj poniżej</div>
       </div>
     </div>
 
     <!-- WYKRES TSH -->
     <div class="card" style="border-left:3px solid var(--accent);">
-      <div class="slbl">Trend TSH — wykres</div>
+      <div class="slbl">Trend TSH - wykres</div>
       <div id="tsh-chart-wrap" style="width:100%;overflow-x:auto;">
         <svg id="tsh-chart" style="display:block;"></svg>
       </div>
@@ -488,7 +488,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
               <span style="color:var(--text3);font-size:13px;flex-shrink:0;">—</span>
               <input type="number" step="0.01" class="text-inp" id="inp-tsh-ref-high" placeholder="do  np. 4.94" style="flex:1">
             </div>
-            <div style="font-size:10px;color:var(--text3);margin-top:4px;">Przepisz z wydruku z laboratorium. Jeśli puste — użyta domyślna norma 0.27–4.94.</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:4px;">Przepisz z wydruku z laboratorium. Jeśli puste - użyta domyślna norma 0.27–4.94.</div>
           </div>
           <div>
             <div class="form-lbl">Notatka (opcjonalnie)</div>
@@ -560,7 +560,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
       <div class="visit-item">
         <div class="visit-icon">🏥</div>
         <div class="visit-info">
-          <div class="visit-title">Endokrynolog — dr Romanowski</div>
+          <div class="visit-title">Endokrynolog - dr Romanowski</div>
           <div class="visit-date">09.12.2025</div>
           <div class="visit-countdown ok">✓ Odbyła się</div>
         </div>
@@ -577,7 +577,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 
     <!-- SKIEROWANIE DO LAB -->
     <div class="card" style="border-left: 3px solid var(--purple);">
-      <div class="slbl" style="color:var(--purple);">Zlecone badania — do wykonania</div>
+      <div class="slbl" style="color:var(--purple);">Zlecone badania - do wykonania</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.8;">
         1. Wapń zjonizowany<br>
         2. Witamina D - 25 OH<br>
@@ -592,33 +592,33 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
 
     <!-- ROZPOZNANIA ICD-10 -->
     <div class="card" style="border-left:3px solid var(--purple);">
-      <div class="slbl">Rozpoznania — ICD-10</div>
+      <div class="slbl">Rozpoznania - ICD-10</div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
           <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">E89.0</span>
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--text);">Niedoczynność tarczycy po leczeniu</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Postthyroidectomy hypothyroidism — po tyreoidektomii 28.03.2023</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Postthyroidectomy hypothyroidism - po tyreoidektomii 28.03.2023</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
           <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">D34</span>
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--text);">Guz łagodny tarczycy</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Benign neoplasm of thyroid gland — wole guzkowe, biopsja 2022</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Benign neoplasm of thyroid gland - wole guzkowe, biopsja 2022</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3);">
           <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--purple);min-width:44px;">Z79.8</span>
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--text);">Długotrwałe stosowanie leków hormonalnych</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Euthyrox N 112 µg — Lewotyroksyna sodowa, od 04.04.2023</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:1px;">Euthyrox N 112 µg - Lewotyroksyna sodowa, od 04.04.2023</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- HISTORIA MEDYCZNA — TIMELINE -->
+    <!-- HISTORIA MEDYCZNA - TIMELINE -->
     <div class="card" style="border-left:3px solid var(--text3);">
       <div class="slbl">Historia medyczna</div>
 
@@ -635,7 +635,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
           <div style="font-size:14px;font-weight:600;color:var(--text);">🔬 Biopsja tarczycy</div>
           <div style="font-size:12px;color:var(--text2);margin-top:3px;line-height:1.7;">
             Lewy płat: 02.09.2022 · Prawy płat: 06.09.2022<br>
-            <span style="color:var(--text2);">Wynik: wole guzkowe — kwalifikacja do operacji</span>
+            <span style="color:var(--text2);">Wynik: wole guzkowe - kwalifikacja do operacji</span>
           </div>
         </div>
 
@@ -654,8 +654,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', system-u
         <!-- DAWKOWANIE -->
         <div style="position:relative;">
           <div style="position:absolute;left:-22px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--bg);"></div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:600;">04.04.2023 — dziś</div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);">💊 Euthyrox — historia dawkowania</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:600;">04.04.2023 - dziś</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">💊 Euthyrox - historia dawkowania</div>
           <div style="margin-top:6px;display:flex;flex-direction:column;gap:5px;">
             <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:6px;background:var(--bg3);">
               <span style="font-size:12px;color:var(--text2);">04.04.2023 – 09.12.2025</span>
@@ -736,7 +736,7 @@ let S = {
   notif: false,
   tsh: [],
   visits: [
-    { id: 1, title: 'Endokrynolog — dr Romanowski', date: '2026-06-24', alert: 21, note: 'Mieć wyniki badań gotowe (wykonaj do 10.06)' }
+    { id: 1, title: 'Endokrynolog - dr Romanowski', date: '2026-06-24', alert: 21, note: 'Mieć wyniki badań gotowe (wykonaj do 10.06)' }
   ]
 };
 
@@ -775,7 +775,7 @@ function getGistToken() { return localStorage.getItem('gist_token') || ''; }
 function buildGistPayload() {
   const now = new Date();
   return {
-    _info:     'Euthyrox Tracker — gist sync',
+    _info:     'Euthyrox Tracker - gist sync',
     _date:     now.toISOString().split('T')[0],
     _sync_time: now.toISOString(),
     _version:  'eth_v2',
@@ -911,7 +911,7 @@ function renderReceiptStatus() {
   const card = $('card-recepta');
   if(!el || !card) return;
   if(diff < 0) {
-    el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Recepta dostępna od ${Math.abs(diff)} dni — zadzwoń po teleporadę</span>`;
+    el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Recepta dostępna od ${Math.abs(diff)} dni - zadzwoń po teleporadę</span>`;
     card.className = 'card card-green';
   } else if(diff === 0) {
     el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Recepta dostępna już DZIŚ!</span>`;
@@ -926,7 +926,7 @@ function renderReceiptStatus() {
 }
 
 function resetData() {
-  if(!confirm('Usunąć wszystkie dane? Blister, historia, TSH — wszystko wróci do zera.\n\nHistoryczne wyniki TSH (zablokowane) zostaną zachowane.\n\nTa operacja jest nieodwracalna.')) return;
+  if(!confirm('Usunąć wszystkie dane? Blister, historia, TSH - wszystko wróci do zera.\n\nHistoryczne wyniki TSH (zablokowane) zostaną zachowane.\n\nTa operacja jest nieodwracalna.')) return;
   localStorage.removeItem('eth_v2');
   S = { blister:25, packs:0, pack_size:50, dose:112, receipt:'', history:{}, warn:14, crit:7, notif:false, tsh:mergeTsh([]), visits:[] };
   saveS(); renderAll(); toast('🗑 Dane wyczyszczone'); goTo('today');
@@ -936,7 +936,7 @@ function resetData() {
 function exportData() {
   const now = new Date();
   const data = {
-    _info:      'Euthyrox Tracker — kopia zapasowa danych',
+    _info:      'Euthyrox Tracker - kopia zapasowa danych',
     _date:      now.toISOString().split('T')[0],
     _time:      now.toTimeString().slice(0,5),
     _version:   'eth_v2',
@@ -966,7 +966,7 @@ function exportData() {
   a.download = 'euthyrox_data.json';   // stała nazwa → łatwiej wrzucić na QNAP
   a.click();
   URL.revokeObjectURL(url);
-  toast('📤 Eksport gotowy — wrzuć euthyrox_data.json do QFile Pro → scripts/');
+  toast('📤 Eksport gotowy - wrzuć euthyrox_data.json do QFile Pro -> scripts/');
 }
 
 function importData() {
@@ -1028,7 +1028,7 @@ function saveTSH() {
 }
 function deleteTSH(idx) {
   if(S.tsh[idx] && S.tsh[idx].isDefault) {
-    toast('🔒 Ten wynik jest zablokowany — historyczne dane medyczne');
+    toast('🔒 Ten wynik jest zablokowane - historyczne dane medyczne');
     return;
   }
   if(!confirm('Usunąć ten wynik TSH?')) return;
@@ -1199,7 +1199,7 @@ function renderTSHToday() {
     <div class="tsh-today-left">
       <div class="tsh-today-ico">🧬</div>
       <div>
-        <div class="tsh-today-label">TSH — ostatni wynik</div>
+        <div class="tsh-today-label">TSH - ostatni wynik</div>
         <div class="tsh-today-sub">${fmtD(latest.date)} · ${lbl}</div>
       </div>
     </div>
@@ -1221,7 +1221,7 @@ function renderNextVisitBar() {
   // Fallback: hardcoded endokrynolog
   const endoDiff = diffD(today, '2026-06-24');
   if(!upcoming && endoDiff < 0) { bar.style.display='none'; return; }
-  const visit = upcoming || { title: 'Endokrynolog — dr Romanowski', date: '2026-06-24', note: '' };
+  const visit = upcoming || { title: 'Endokrynolog - dr Romanowski', date: '2026-06-24', note: '' };
   const diff = diffD(today, visit.date);
   if(diff < 0) { bar.style.display='none'; return; }
   const color = diff<=7 ? 'var(--red)' : diff<=14 ? 'var(--yellow)' : 'var(--accent)';
@@ -1246,7 +1246,7 @@ function renderAlerts(tot) {
   if(tot<=S.crit) {
     z.innerHTML+=`<div class="alert danger"><strong>Krytyczny poziom zapasu!</strong>Zostało tylko ${tot} dni tabletek.</div>`;
   } else if(tot<=S.warn) {
-    z.innerHTML+=`<div class="alert warn"><strong>Niski zapas — czas działać</strong>Zostało ${tot} dni.</div>`;
+    z.innerHTML+=`<div class="alert warn"><strong>Niski zapas - czas działać</strong>Zostało ${tot} dni.</div>`;
   }
   if(S.receipt) {
     const diff=diffD(todayK(), S.receipt);
@@ -1265,7 +1265,7 @@ function renderAlerts(tot) {
   const diffLab=diffD(todayK(),'2026-06-10');
   if(diffLab>=0 && diffLab<=21) {
     const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
-    z.innerHTML+=`<div class="alert ${cls}"><strong>${diffLab<=7?'🚨':'🔬'} Badania przed endokrynologiem — ${diffLab} dni</strong>Wykonaj do 10.06 · wizyta 24.06.2026</div>`;
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${diffLab<=7?'🚨':'🔬'} Badania przed endokrynologiem - ${diffLab} dni</strong>Wykonaj do 10.06 · wizyta 24.06.2026</div>`;
   }
 }
 
@@ -1308,7 +1308,7 @@ function renderHistory() {
   }
   const ms=monthStats();
   $('s-taken').textContent=ms.taken+' dni';
-  $('s-miss').textContent=ms.missed ? ms.missed+' dni' : '0 — ideał! 🎯';
+  $('s-miss').textContent=ms.missed ? ms.missed+' dni' : '0 - ideał! 🎯';
   $('s-long').textContent=calcStreak()+' dni';
   const start2=firstDay();
   const daysSinceStart=Math.max(1, diffD(start2, today)+1);
@@ -1450,7 +1450,7 @@ function renderVisitAlerts() {
     if(diff<=v.alert) {
       const cls=diff<=3?'danger':diff<=7?'warn':'info';
       const ico=diff<=3?'🚨':diff<=7?'⚠️':'📅';
-      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} - za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
     }
   });
   // Dynamiczne alerty wizyt — 3 poziomy
@@ -1459,7 +1459,7 @@ function renderVisitAlerts() {
     if(diff<0 || diff>21) return;
     const cls=diff<=7?'danger':diff<=14?'warn':'info';
     const ico=diff<=7?'🚨':diff<=14?'⚠️':'📅';
-    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} — za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
+    z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} ${v.title} - za ${diff} dni (${fmtD(v.date)})</strong>${v.note||''}</div>`;
   });
   // Stały alert badania lab przed wizytą 24.06
   const diffEndo=diffD(today,'2026-06-24');
@@ -1468,9 +1468,9 @@ function renderVisitAlerts() {
     if(diffLab>=0) {
       const cls=diffLab<=7?'danger':diffLab<=14?'warn':'info';
       const ico=diffLab<=7?'🚨':diffLab<=14?'⚠️':'🔬';
-      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} Badania przed endokrynologiem — wykonaj do 10.06.2026</strong>Wizyta za ${diffEndo} dni · zostało ${diffLab} dni na laboratorium</div>`;
+      z.innerHTML+=`<div class="alert ${cls}"><strong>${ico} Badania przed endokrynologiem - wykonaj do 10.06.2026</strong>Wizyta za ${diffEndo} dni · zostało ${diffLab} dni na laboratorium</div>`;
     } else {
-      z.innerHTML+=`<div class="alert danger"><strong>🚨 Termin badań minął! Wizyta za ${diffEndo} dni</strong>Zrób badania natychmiast — KORLAB</div>`;
+      z.innerHTML+=`<div class="alert danger"><strong>🚨 Termin badań minął! Wizyta za ${diffEndo} dni</strong>Zrób badania natychmiast - KORLAB</div>`;
     }
   }
 }
@@ -1479,7 +1479,7 @@ function renderTSHCurrent() {
   const el=$('tsh-current-content');
   const card=$('tsh-current-card');
   if(!S.tsh||S.tsh.length===0) {
-    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników — dodaj poniżej</div>';
+    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:16px 0;">Brak wyników - dodaj poniżej</div>';
     card.className='card card-accent';
     return;
   }
